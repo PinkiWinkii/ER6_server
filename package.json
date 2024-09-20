@@ -1,0 +1,19 @@
+{
+  "name": "er6_server_anati",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/PinkiWinkii/ER6_server.git"
+  },
+  "author": "ANATIDAEPHOBIA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PinkiWinkii/ER6_server/issues"
+  },
+  "homepage": "https://github.com/PinkiWinkii/ER6_server#readme"
+}
