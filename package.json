@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/PinkiWinkii/ER6_server/issues"
   },
-  "homepage": "https://github.com/PinkiWinkii/ER6_server#readme"
+  "homepage": "https://github.com/PinkiWinkii/ER6_server#readme",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
 }
