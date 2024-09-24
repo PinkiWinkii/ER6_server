@@ -1,7 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const admin = require('firebase-admin');
-const cors = require('cors'); 
+const cors  = require('cors'); 
 const bodyParser = require('body-parser');
+const mongoose      = require('mongoose');
+const mongodbRoute  = process.env.MONGO_DB_STRING;
 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
@@ -40,6 +43,18 @@ app.post('/verify-token', async (req, res) => {
 
 // Inicia el servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor levantado en el puerto ${PORT}`);
-});
+
+async function start(){
+  try{
+    await mongoose.connect(mongodbRoute);
+    app.listen(PORT, () => {
+      console.log(`Servidor levantado en el puerto ${PORT}`);
+    });
+    console.log("Conexion con mongo correcta");
+  } catch (error){
+
+    console.log(`Error al conectar a la base de datos ${error}`);
+  }
+}
+
+start();
