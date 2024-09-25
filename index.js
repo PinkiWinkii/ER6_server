@@ -8,6 +8,7 @@ const mongodbRoute  = process.env.MONGO_DB_STRING;
 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
+const playerRouter   = require('./src/routes/playerRoutes');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -17,7 +18,8 @@ const app = express();
 
 // Middleware
 app.use(cors()); 
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
+app.use("/api/players", playerRouter);
 
 // Ruta para verificar el token
 app.post('/verify-token', async (req, res) => {
