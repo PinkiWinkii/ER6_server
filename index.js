@@ -7,7 +7,7 @@ const mongoose      = require('mongoose');
 const mongodbRoute  = process.env.MONGO_DB_STRING;
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-
+const { IP }     = require('./constants'); 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter   = require('./src/routes/playerRoutes');
@@ -22,7 +22,7 @@ const server = createServer(app);
 // Inicializar socket.io con el servidor de Express
 const io = new Server(server, { 
   cors: {
-    origin: "'http://10.70.0.79'", // Configura CORS según sea necesario
+    origin: IP.Miguel, // Configura CORS según sea necesario
     methods: ["GET", "POST"]
   }
 });
