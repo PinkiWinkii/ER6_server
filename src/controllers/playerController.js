@@ -31,6 +31,8 @@ const addNewPlayer = async (req, res) => {
         equipment:      body.equipment,
         inventory:      body.inventory,
         name:           body.name,
+        email:          body.email,
+        nickname:       body.nickname,
         level:          body.level,
         experience:     body.experience,
         is_active:      body.is_active,
@@ -57,7 +59,33 @@ const addNewPlayer = async (req, res) => {
     }
 }
 
+const getPlayerByEmail = async (req, res) => {
+
+    const { params : { playerEmail }} = req;
+    
+    try {
+        const player = await playerService.getPlayerByEmail(playerEmail);
+        if(!player){
+            return res.status(400).send({
+                status: "FAILED",
+                data: { error: `Can't find player with the email '${playerEmail}' `}
+
+            });
+        }
+
+        res.send({ status: "OK" , data: player});
+    } catch (error){
+
+        res.status(error?.status || 500).send({
+            status: "FAILED",
+            message: "Error al realizar la peticion",
+            data: { error: error?.message || error}
+        })
+    }
+} 
+
 module.exports = {
     getAllPlayers,
-    addNewPlayer
+    addNewPlayer,
+    getPlayerByEmail
 }

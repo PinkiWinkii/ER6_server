@@ -22,7 +22,7 @@ const server = createServer(app);
 // Inicializar socket.io con el servidor de Express
 const io = new Server(server, { 
   cors: {
-    origin: IP.Miguel, // Configura CORS según sea necesario
+    origin: '192.168.1.134', // Configura CORS según sea necesario
     methods: ["GET", "POST"]
   }
 });
