@@ -5,6 +5,8 @@ const cors  = require('cors');
 const bodyParser = require('body-parser');
 const mongoose      = require('mongoose');
 const mongodbRoute  = process.env.MONGO_DB_STRING;
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
@@ -14,6 +16,20 @@ admin.initializeApp({
 });
 
 const app = express();
+const server = createServer(app);
+
+// Inicializar socket.io con el servidor de Express
+const io = new Server(server, { 
+  cors: {
+    origin: "'http://10.70.0.79'", // Configura CORS según sea necesario
+    methods: ["GET", "POST"]
+  }
+});
+
+//Listener para saber si alguien se ha conectado, y su conexiónId
+io.on('connection', (socket) => {
+  console.log("user connected", socket.id);
+})
 
 // Middleware
 app.use(cors()); 
@@ -47,7 +63,7 @@ const PORT = process.env.PORT || 3000;
 async function start(){
   try{
     await mongoose.connect(mongodbRoute);
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Servidor levantado en el puerto ${PORT}`);
     });
     console.log("Conexion con mongo correcta");
