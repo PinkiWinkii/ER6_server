@@ -29,7 +29,7 @@ const io = new Server(server, {
 
 //Listener para saber si alguien se ha conectado, y su conexiónId
 io.on('connection', (socket) => {
-  console.log("user connected", socket.id);
+  console.log("User Socket ID:", socket.id);
 })
 
 // Middleware
