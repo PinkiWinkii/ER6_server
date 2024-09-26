@@ -39,7 +39,10 @@ const addNewPlayer = async (req, res) => {
         profile:        body.profile,
         taks:           body.tasks,
         gold:           body.gold,
-        created_date:   body.created_date
+        created_date:   body.created_date,
+        rol:            body.rol,
+        socketId:       body.socketId,
+        isInside:       body.isInside
     }
 
     try {

@@ -15,7 +15,10 @@ const playerSchema = new Schema({
     profile:        {},
     tasks:          [],
     gold:           Number,
-    created_date:   String
+    created_date:   String,
+    rol:            String,
+    socketId:       String,
+    isInside:       Boolean
 
 })
 
