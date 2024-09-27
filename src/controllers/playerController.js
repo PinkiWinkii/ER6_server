@@ -40,9 +40,9 @@ const addNewPlayer = async (req, res) => {
         taks:           body.tasks,
         gold:           body.gold,
         created_date:   body.created_date,
-        rol:            body.rol,
+        role:           body.role,
         socketId:       body.socketId,
-        isInside:       body.isInside
+        isInsideLab:    body.isInsideLab
     }
 
     try {
