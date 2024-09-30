@@ -37,8 +37,21 @@ const getPlayerByEmail = async (playerEmail) => {
     }
 }
 
+const updateOnePlayer = async(playerId, changes) => {
+
+    try {
+        const updatePlayer = Player.updateOnePlayer(playerId, changes);
+        return updatePlayer;
+    }
+    catch (error) {
+
+        throw error;
+    }
+}
+
 module.exports = {
     getAllPlayers,
     addNewPlayer,
-    getPlayerByEmail
+    getPlayerByEmail,
+    updateOnePlayer
 }
