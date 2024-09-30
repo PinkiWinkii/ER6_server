@@ -31,8 +31,10 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
 
-  socket.on('qrScanned', (QrValue) => {
-    console.log("QR Value received:", QrValue);
+  socket.on('qrScanned', (qrValue) => {
+    console.log("QR Value received:", qrValue);
+
+      socket.emit('ScanSuccess', "OK!")
   });
   
 })
