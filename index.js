@@ -22,7 +22,7 @@ const server = createServer(app);
 // Inicializar socket.io con el servidor de Express
 const io = new Server(server, { 
   cors: {
-    origin: '10.70.0.139', // Configura CORS según sea necesario
+    origin: '10.70.0.79', // Configura CORS según sea necesario
     methods: ["GET", "POST"]
   }
 });
@@ -30,7 +30,13 @@ const io = new Server(server, {
 //Listener para saber si alguien se ha conectado, y su conexiónId
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
+
+  socket.on('qrScanned', (QrValue) => {
+    console.log("QR Value received:", QrValue);
+  });
+  
 })
+
 
 // Middleware
 app.use(cors()); 
