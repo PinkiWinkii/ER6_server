@@ -25,7 +25,20 @@ const addNewPlayer = async (newPlayer) => {
     }
 }
 
+const getPlayerByEmail = async (playerEmail) => {
+
+    try {
+        const player = Player.getPlayerByEmail(playerEmail);
+        return player;
+    }
+    catch (error){
+
+        throw error;
+    }
+}
+
 module.exports = {
     getAllPlayers,
-    addNewPlayer
+    addNewPlayer,
+    getPlayerByEmail
 }
