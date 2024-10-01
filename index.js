@@ -32,28 +32,20 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
 
-  socket.on('getConnectedUsers', () => {
-    const connectedSockets = Array.from(io.sockets.sockets.keys()); // Obtener todas las socket IDs
-    console.log("Connected Users:", connectedSockets);
-
-    // Emitir lista de usuarios conectados de vuelta al cliente si se desea
-    socket.emit('connectedUsersList', connectedSockets);
-  });
-
     // QR value receiving
     socket.on('qrScanned', (qrValue) => {
-    // Primero parseamos el valor QR recibido
-    const parsedQrValue = JSON.parse(qrValue);
-    console.log("QR Value received:", parsedQrValue);
-    
-    // Ahora sí podemos acceder a socketId de parsedQrValue
-    console.log("SOCKET ID OF THE SCANNED ACOLYTE: " + parsedQrValue.socketId);
-    
-    // Emitir el evento usando el socketId del objeto parseado
-    socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
-    
-    // Emitir OK message después de recibir el valor QR
-    socket.emit('ScanSuccess', "OK!");
+      // Primero parseamos el valor QR recibido
+      const parsedQrValue = JSON.parse(qrValue);
+      console.log("QR Value received:", parsedQrValue);
+      
+      // Ahora sí podemos acceder a socketId de parsedQrValue
+      console.log("SOCKET ID OF THE SCANNED ACOLYTE: " + parsedQrValue.socketId);
+      
+      // Emitir el evento usando el socketId del objeto parseado
+      socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
+      
+      // Emitir OK message después de recibir el valor QR
+      socket.emit('ScanSuccess', "OK!");
   });
 })
 
