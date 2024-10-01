@@ -36,4 +36,18 @@ const verifyGetOneByEmail = async (req, res, next) => {
     next();
 }
 
-module.exports = { verify, verifyGetOneByEmail}
+const verifyId = async (req, res, next) => {
+
+    const { params: {playerId} } = req;
+
+    if(!playerId){
+        return res.status(400).send({
+            status: "FAILED",
+            data: { error: "Parameter id can not be empty"}
+        })
+    }
+
+    next();
+}
+
+module.exports = { verify, verifyGetOneByEmail, verifyId}

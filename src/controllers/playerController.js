@@ -85,10 +85,37 @@ const getPlayerByEmail = async (req, res) => {
             data: { error: error?.message || error}
         })
     }
-} 
+}
+
+const updateOnePlayer = async (req, res) => {
+
+    const { body, params : { playerId } } = req;
+
+    try {
+        const updatePlayer = await playerService.updateOnePlayer(playerId, body);
+
+        if(!updatePlayer){
+            return  res.status(400).send({
+                status: "FAILED",
+                data: { error: `Can't find player with the id '${playerId}'`}
+            })
+        }
+
+        res.send({ status: "OK", data: updatePlayer});
+    }
+    catch (error){
+
+        res.status(error?.status || 500).send({
+            status: "FAILED",
+            message: "Error al realizar la peticion",
+            data: { error: error?.message || error}
+        });
+    }
+}
 
 module.exports = {
     getAllPlayers,
     addNewPlayer,
-    getPlayerByEmail
+    getPlayerByEmail,
+    updateOnePlayer
 }

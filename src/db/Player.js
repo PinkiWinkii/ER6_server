@@ -36,8 +36,22 @@ const getPlayerByEmail = async (playerEmail) => {
     }
 }
 
+const updateOnePlayer = async (playerId, changes) => {
+
+    try {
+        let updatePlayer = await Player.findByIdAndUpdate(playerId, {$set: changes} , {new: true});
+        return updatePlayer;
+    }
+    catch (error){
+
+        throw error;
+    }
+
+}
+
 module.exports = {
     getAllPlayers,
     addNewPlayer,
-    getPlayerByEmail
+    getPlayerByEmail,
+    updateOnePlayer
 }
