@@ -22,15 +22,26 @@ const server = createServer(app);
 // Inicializar socket.io con el servidor de Express
 const io = new Server(server, { 
   cors: {
-    origin: '10.70.0.139', // Configura CORS según sea necesario
-    methods: ["GET", "POST"]
+    origin: 'https://er6-staging-server.onrender.com', // Configura CORS según sea necesario
+    methods: ["GET", "POST"],
+    transports: ['websocket']
   }
 });
 
 //Listener para saber si alguien se ha conectado, y su conexiónId
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
+
+  // QR value receiving
+  socket.on('qrScanned', (qrValue) => {
+    console.log("QR Value received:", qrValue);
+
+    // Emiting OK message after receiving qr value
+      socket.emit('ScanSuccess', "OK!")
+  });
+  
 })
+
 
 // Middleware
 app.use(cors()); 
@@ -40,7 +51,7 @@ app.use("/api/players", playerRouter);
 // Ruta para verificar el token
 app.post('/verify-token', async (req, res) => {
   const { idToken } = req.body;
-  console.log("Token recibido:" + idToken);
+  //console.log("Token recibido:" + idToken);
   
   if (!idToken) {
     return res.status(400).json({ error: 'No se proporcionó el idToken' });
