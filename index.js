@@ -37,7 +37,9 @@ io.on('connection', (socket) => {
     console.log("QR Value received:", qrValue);
 
     // Emiting OK message after receiving qr value
-      socket.emit('ScanSuccess', "OK!")
+      socket.emit('ScanSuccess', "OK!");
+
+      io.emit('value', socket.id);
   });
   
 })
