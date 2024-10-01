@@ -12,4 +12,6 @@ router.patch("/:playerId", middleware.verifyId, playerController.updateOnePlayer
 // Actualizar el player por email
 router.patch("/email/:playerEmail", middleware.verifyGetOneByEmail, playerController.updateOnePlayerByEmail);
 
+
+router.patch("/:playerEmail", middleware.verifyId, playerController.updateOnePlayer);
 module.exports = router;
