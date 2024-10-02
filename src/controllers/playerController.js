@@ -1,4 +1,6 @@
 const playerService = require('../services/playerService');
+const { getSocket } = require('../socket');
+
 
 const getAllPlayers = async (req, res) => {
 
@@ -100,6 +102,9 @@ const updateOnePlayer = async (req, res) => {
                 data: { error: `Can't find player with the id '${playerId}'`}
             })
         }
+
+        const io = getSocket();
+        io.emit('update' , {playerId, isInsideLab: updatePlayer.isInsideLab});
 
         res.send({ status: "OK", data: updatePlayer});
     }

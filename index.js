@@ -11,7 +11,7 @@ const { IP }     = require('./constants');
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter   = require('./src/routes/playerRoutes');
-
+const { initSocket, getSocket } = require('./src/socket');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -20,14 +20,16 @@ const app = express();
 const server = createServer(app);
 
 // Inicializar socket.io con el servidor de Express
-const io = new Server(server, { 
-  cors: {
-    origin: '10.70.0.58', // Configura CORS según sea necesario
-    methods: ["GET", "POST"],
-    transports: ['websocket']
-  }
-});
+// const io = new Server(server, { 
+//   cors: {
+//     origin: '192.168.1.133', // Configura CORS según sea necesario
+//     methods: ["GET", "POST", "PATCH"],
+//     transports: ['websocket']
+//   }
+// });
 
+initSocket(server);
+const io = getSocket();
 //Listener para saber si alguien se ha conectado, y su conexiónId
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
@@ -96,3 +98,4 @@ async function start(){
 }
 
 start();
+
