@@ -18,7 +18,8 @@ const playerSchema = new Schema({
     created_date:   String,
     rol:            String,
     socketId:       String,
-    isInsideLab:    Boolean
+    isInsideLab:    Boolean,
+    avatar:         String
 
 })
 

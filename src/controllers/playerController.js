@@ -44,7 +44,8 @@ const addNewPlayer = async (req, res) => {
         created_date:   body.created_date,
         role:           body.role,
         socketId:       body.socketId,
-        isInsideLab:    body.isInsideLab
+        isInsideLab:    body.isInsideLab,
+        avatar:         body.avatar
     }
 
     try {
