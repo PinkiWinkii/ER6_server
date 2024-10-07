@@ -16,7 +16,7 @@ const playerSchema = new Schema({
     tasks:          [],
     gold:           Number,
     created_date:   String,
-    rol:            String,
+    role:           String,
     socketId:       String,
     isInsideLab:    Boolean,
     avatar:         String
