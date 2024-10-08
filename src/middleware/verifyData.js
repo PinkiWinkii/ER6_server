@@ -5,7 +5,7 @@ const verify = async (req, res, next) => {
     const requirements = [
         'attributes', 'equipment', 'inventory', 'name', 'nickname',
         'email', 'level', 'experience', 'is_active', 'profile', 'tasks',
-        'gold', 'created_date', 'role', 'isInsideLab', 'socketId', 'avatar'
+        'gold', 'created_date', 'avatar'
     ];
 
     const missingField = requirements.find(key => body[key] == null);

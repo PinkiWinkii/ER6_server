@@ -1,3 +1,4 @@
+const { Socket } = require('socket.io');
 const playerService = require('../services/playerService');
 const { getSocket } = require('../socket');
 
@@ -26,7 +27,8 @@ const getAllPlayers = async (req, res) => {
 
 const addNewPlayer = async (req, res) => {
 
-    const { body } = req;
+    const { body }    = req;
+    const role        = manageRole(body.email);
 
     const newPlayer = {
         attributes:     body.attributes,
@@ -42,10 +44,10 @@ const addNewPlayer = async (req, res) => {
         taks:           body.tasks,
         gold:           body.gold,
         created_date:   body.created_date,
-        role:           body.role,
+        role:           role,                   // Asignar role desde server    
         socketId:       body.socketId,
-        isInsideLab:    body.isInsideLab,
-        avatar:         body.avatar
+        isInsideLab:    false,                  // Inicializo en false siempre
+        avatar:         body.avatar             
     }
 
     try {
@@ -63,6 +65,40 @@ const addNewPlayer = async (req, res) => {
             data: { error: error?.message || error }
         });
     }
+}
+
+const manageRole = (email) => {
+    let role;
+    console.log("El email del usuario autenticado es: " + email);
+    
+    const ISTVAN_EMAIL    = "classcraft.daw2@aeg.eus";
+    const MORTIMER_EMAIL  = "asier.arguinchona@ikasle.aeg.eus";
+    const VILLAIN_EMAIL   = "ozarate@aeg.eus";
+    const ACOLYTE_EMAIL   = "@ikasle.aeg.eus";
+
+    switch (email) {
+        case ISTVAN_EMAIL:
+            role = 'ISTVAN'
+            break;
+
+        case VILLAIN_EMAIL:
+            role = 'VILLANO'
+            break;
+
+        case MORTIMER_EMAIL:
+            role = 'MORTIMER'
+            break;
+
+        default:
+            if (email && email.endsWith(ACOLYTE_EMAIL)) {
+                role = 'ACOLYTE'
+            } else {
+                role = "UNKNOWN ROLE"
+            }
+            break;
+    }
+
+    return role;
 }
 
 const getPlayerByEmail = async (req, res) => {
