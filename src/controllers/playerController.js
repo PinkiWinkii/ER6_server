@@ -72,7 +72,7 @@ const manageRole = (email) => {
     console.log("El email del usuario autenticado es: " + email);
     
     const ISTVAN_EMAIL    = "classcraft.daw2@aeg.eus";
-    const MORTIMER_EMAIL  = "asier.arguinchona@ikasle.aeg.eus";
+    const MORTIMER_EMAIL  = "oskar.calvo@aeg.eus";
     const VILLAIN_EMAIL   = "ozarate@aeg.eus";
     const ACOLYTE_EMAIL   = "@ikasle.aeg.eus";
 
