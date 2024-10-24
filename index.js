@@ -31,6 +31,11 @@ client.on('connect', () => {
   console.log('Connected securely to MQTT broker');
 })
 
+// Manejo de errores de conexión
+client.on('error', (error) => {
+  console.error('Error al conectar al broker MQTT:', error.message);
+});
+
 initSocket(server);
 const io = getSocket();
 //Listener para saber si alguien se ha conectado, y su conexiónId
