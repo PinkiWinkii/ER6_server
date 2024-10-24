@@ -47,7 +47,8 @@ const addNewPlayer = async (req, res) => {
         role:           role,                   // Asignar role desde server    
         socketId:       body.socketId,
         isInsideLab:    false,                  // Inicializo en false siempre
-        avatar:         body.avatar             
+        avatar:         body.avatar, 
+        isInsideTower:  false,         
     }
 
     try {
