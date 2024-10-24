@@ -84,6 +84,28 @@ app.post('/verify-token', async (req, res) => {
   }
 });
 
+app.post('/send-notification', async (req, res) => {
+
+  console.log('SE VA A HACER UN PUSH NOTIFY');
+  
+
+  const { fcmToken, title, body } = req.body;
+
+
+  if (!fcmToken || !title || !body) {
+    return res.status(400).json({ error: 'Faltan parámetros.' });
+  }
+
+  try {
+    await sendPushNotification(fcmToken, title, body);
+    res.json({ success: true });
+    console.log('SE HA MANDADO EL PUSH');
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Error enviando la notificación.' });
+  }
+});
+
 // Inicia el servidor
 const PORT = process.env.PORT || 3000;
 
