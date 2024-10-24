@@ -21,16 +21,6 @@ admin.initializeApp({
 const app = express();
 const server = createServer(app);
 
-const clientId = 'ANATIDAEPHOBIA_NODE';
-
-// Conectar al broker MQTT (asegúrate de que sea accesible desde Render)
-const mqttBrokerUrl = 'mqtt://10.80.128.11'; // Reemplaza con tu broker MQTT accesible
-const client = mqtt.connect(mqttBrokerUrl, { clientId });
-
-client.on('connect', () => {
-  console.log('Connected securely to MQTT broker');
-})
-
 initSocket(server);
 const io = getSocket();
 //Listener para saber si alguien se ha conectado, y su conexiónId
