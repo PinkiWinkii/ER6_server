@@ -25,7 +25,11 @@ const clientId = 'ANATIDAEPHOBIA_NODE';
 
 // Conectar al broker MQTT (asegúrate de que sea accesible desde Render)
 const mqttBrokerUrl = 'mqtt://10.80.128.11'; // Reemplaza con tu broker MQTT accesible
+const client = mqtt.connect(mqttBrokerUrl, { clientId });
 
+client.on('connect', () => {
+  console.log('Connected securely to MQTT broker');
+})
 
 initSocket(server);
 const io = getSocket();
@@ -86,21 +90,6 @@ const PORT = process.env.PORT || 3000;
 async function start(){
   try{
     await mongoose.connect(mongodbRoute);
-
-    const client =  mqtt.connect(mqttBrokerUrl, { clientId ,
-      connectTimeout: 30 * 1000,
-    });
-
-    client.on('connect', () => {
-      console.log('Connected securely to MQTT broker');
-    })
-
-    // Manejo de errores de conexión
-    client.on('error', (error) => {
-      console.error('Error al conectar al broker MQTT:', error.message);
-      console.error('Detalles del error:', error);
-    });
-
     server.listen(PORT, () => {
       console.log(`Servidor levantado en el puerto ${PORT}`);
     });
