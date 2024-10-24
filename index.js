@@ -7,7 +7,9 @@ const mongoose      = require('mongoose');
 const mongodbRoute  = process.env.MONGO_DB_STRING;
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const { IP }     = require('./constants'); 
+const { IP }     = require('./constants');
+const mqtt = require('mqtt');
+const fs = require('fs');
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter   = require('./src/routes/playerRoutes');
@@ -19,14 +21,14 @@ admin.initializeApp({
 const app = express();
 const server = createServer(app);
 
-// Inicializar socket.io con el servidor de Express
-// const io = new Server(server, { 
-//   cors: {
-//     origin: '192.168.1.133', // Configura CORS según sea necesario
-//     methods: ["GET", "POST", "PATCH"],
-//     transports: ['websocket']
-//   }
-// });
+const clientId = 'ANATIDAEPHOBIA_NODE';
+
+// Connect mqtt broker without credentials
+const client = mqtt.connect('mqtt://10.80.128.11', {clientId});
+
+client.on('connect', () => {
+  console.log('Connected securely to MQTT broker');
+})
 
 initSocket(server);
 const io = getSocket();
