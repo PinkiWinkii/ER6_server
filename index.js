@@ -23,8 +23,9 @@ const server = createServer(app);
 
 const clientId = 'ANATIDAEPHOBIA_NODE';
 
-// Connect mqtt broker without credentials
-const client = mqtt.connect('mqtt://10.80.128.11', {clientId});
+// Conectar al broker MQTT (asegúrate de que sea accesible desde Render)
+const mqttBrokerUrl = 'mqtt://10.80.128.11'; // Reemplaza con tu broker MQTT accesible
+const client = mqtt.connect(mqttBrokerUrl, { clientId });
 
 client.on('connect', () => {
   console.log('Connected securely to MQTT broker');
