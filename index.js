@@ -21,34 +21,34 @@ admin.initializeApp({
 const app = express();
 const server = createServer(app);
 
-// Load the certificates
-const options = {
-  key: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.key'),
-  cert: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.crt'),
-  ca: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/ca.crt'),
-  rejectUnauthorized: true,
-  clientId: 'LANDER_NODE'
-}
+// // Load the certificates
+// const options = {
+//   key: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.key'),
+//   cert: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.crt'),
+//   ca: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/ca.crt'),
+//   rejectUnauthorized: true,
+//   clientId: 'LANDER_NODE'
+// }
 
-const client = mqtt.connect('mqtts://localhost:8883', options);
+// const client = mqtt.connect('mqtts://localhost:8883', options);
 
-const topic = 'test'
+// const topic = 'test'
 
-client.on('connect', () => {
-  console.log('Connected securely to MQTT broker');
+// client.on('connect', () => {
+//   console.log('Connected securely to MQTT broker');
   
-  client.publish(topic, 'landers message from node', { qos: 0, retain: false }, (error) => {
-    if (error) {
-      console.error(error)
-    }
-  })
-})
+//   client.publish(topic, 'landers message from node', { qos: 0, retain: false }, (error) => {
+//     if (error) {
+//       console.error(error)
+//     }
+//   })
+// })
 
-// Manejar errores de conexión
-client.on('error', (err) => {
-  console.error('Error de conexión:', err);
-  // Puedes agregar más acciones aquí, como reintentos o lógica adicional
-});
+// // Manejar errores de conexión
+// client.on('error', (err) => {
+//   console.error('Error de conexión:', err);
+//   // Puedes agregar más acciones aquí, como reintentos o lógica adicional
+// });
 
 initSocket(server);
 const io = getSocket();
