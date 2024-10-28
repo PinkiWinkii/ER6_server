@@ -14,6 +14,10 @@ const fs = require('fs');
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter   = require('./src/routes/playerRoutes');
 const { initSocket, getSocket } = require('./src/socket');
+const { getMessaging } = require('firebase-admin/messaging');
+
+const messaging = getMessaging();
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
