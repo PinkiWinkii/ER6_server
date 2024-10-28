@@ -29,26 +29,27 @@ const server = createServer(app);
 //   rejectUnauthorized: true,
 //   clientId: 'LANDER_NODE'
 // }
+const client = mqtt.connect('mqtt://10.80.128.11:1883');
 
-// const client = mqtt.connect('mqtts://localhost:8883', options);
+const topic = 'testEsp32'
 
-// const topic = 'test'
+client.on('connect', () => {
+  console.log('Connected not securely to MQTT broker');
+  client.subscribe([topic], () => {
+    console.log(`Subscribe to topic '${topic}'`)
+  })
+})
 
-// client.on('connect', () => {
-//   console.log('Connected securely to MQTT broker');
-  
-//   client.publish(topic, 'landers message from node', { qos: 0, retain: false }, (error) => {
-//     if (error) {
-//       console.error(error)
-//     }
-//   })
-// })
+// Manejar mensajes recibidos
+client.on('message', (topic, message) => {
+  console.log(`Mensaje recibido en topic '${topic}': ${message.toString()}`);
+});
 
-// // Manejar errores de conexión
-// client.on('error', (err) => {
-//   console.error('Error de conexión:', err);
-//   // Puedes agregar más acciones aquí, como reintentos o lógica adicional
-// });
+// Manejar errores de conexión
+client.on('error', (err) => {
+  console.error('Error de conexión:', err);
+  // Puedes agregar más acciones aquí, como reintentos o lógica adicional
+});
 
 initSocket(server);
 const io = getSocket();
@@ -120,4 +121,3 @@ async function start(){
 }
 
 start();
-
