@@ -20,7 +20,8 @@ const playerSchema = new Schema({
     socketId:       String,
     isInsideLab:    Boolean,
     avatar:         String,
-    isInsideTower:  Boolean
+    isInsideTower:  Boolean,
+    AccessTowerId:  String
 })
 
 // Export model

@@ -48,7 +48,8 @@ const addNewPlayer = async (req, res) => {
         socketId:       body.socketId,
         isInsideLab:    false,                  // Inicializo en false siempre
         avatar:         body.avatar, 
-        isInsideTower:  false,         
+        isInsideTower:  false,
+        AccesTowerID:   ''
     }
 
     try {
