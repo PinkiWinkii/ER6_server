@@ -25,6 +25,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+//Test commentary
 const messaging = getMessaging();
 
 app.post('/send-notification', async (req, res) => {
