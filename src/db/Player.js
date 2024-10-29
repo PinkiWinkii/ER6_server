@@ -63,7 +63,9 @@ const updateOnePlayerByEmail = async (playerEmail, changes) => {
 
 const verifyTowerAccesId = async ( towerId ) => {
     try {
-        const player = await Player.find({ AccessTowerId: towerId });
+        const player = await Player.findOne({ accessTowerID: towerId });
+
+        console.log("PLAYER.JS " + player);
         return player;
     }
     catch ( error ){

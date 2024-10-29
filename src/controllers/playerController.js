@@ -184,10 +184,28 @@ const updateOnePlayerByEmail = async (req, res) => {
     }
 }
 
+const verifyTowerAccesId = async( towerId ) => {
+    try {
+
+        const player = await playerService.verifyTowerAccesId(towerId);
+
+        if(player === null){
+            return { haveAccessTower: false }
+        }
+
+        return { data: player, haveAccessTower: true }
+    }
+    catch ( error ){
+        
+        console.log(error);
+    }
+}
+
 module.exports = {
     getAllPlayers,
     addNewPlayer,
     getPlayerByEmail,
     updateOnePlayer,
-    updateOnePlayerByEmail
+    updateOnePlayerByEmail,
+    verifyTowerAccesId
 }

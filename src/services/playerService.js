@@ -63,7 +63,7 @@ const updateOnePlayerByEmail = async (playerEmail, changes) => {
 
 const verifyTowerAccesId = async( towerId ) => {
     try {
-        const player = Player.verifyTowerAccesId(towerId);
+        const player = await Player.verifyTowerAccesId(towerId);
         return player;
     }
     catch (error){

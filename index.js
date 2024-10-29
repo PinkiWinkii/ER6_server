@@ -6,8 +6,7 @@ const bodyParser = require('body-parser');
 const mongoose      = require('mongoose');
 const mongodbRoute  = process.env.MONGO_DB_STRING;
 const { createServer } = require("http");
-const { Server } = require("socket.io");
-const { IP }     = require('./constants');
+const playerController = require('./src/controllers/playerController');
 const mqtt = require('mqtt');
 const fs = require('fs');
 // Inicializar Firebase Admin SDK
@@ -31,7 +30,7 @@ const server = createServer(app);
 // }
 const client = mqtt.connect('mqtt://10.80.128.11:1883');
 
-const topic = 'testEsp32'
+const topic = 'testCardID'
 
 client.on('connect', () => {
   console.log('Connected not securely to MQTT broker');
@@ -41,8 +40,12 @@ client.on('connect', () => {
 })
 
 // Manejar mensajes recibidos
-client.on('message', (topic, message) => {
+client.on('message', async(topic, message) => {
   console.log(`Mensaje recibido en topic '${topic}': ${message.toString()}`);
+
+  const data = await playerController.verifyTowerAccesId(message.toString());
+
+  console.log(data);
 });
 
 // Manejar errores de conexión
