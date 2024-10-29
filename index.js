@@ -3,23 +3,72 @@ const express = require('express');
 const admin = require('firebase-admin');
 const cors  = require('cors'); 
 const bodyParser = require('body-parser');
-const mongoose      = require('mongoose');
-const mongodbRoute  = process.env.MONGO_DB_STRING;
+const mongoose = require('mongoose');
+const mongodbRoute = process.env.MONGO_DB_STRING;
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const { IP }     = require('./constants');
+const { IP } = require('./constants');
 const mqtt = require('mqtt');
 const fs = require('fs');
+
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
-const playerRouter   = require('./src/routes/playerRoutes');
+const playerRouter = require('./src/routes/playerRoutes');
 const { initSocket, getSocket } = require('./src/socket');
+const { getMessaging } = require('firebase-admin/messaging');
+
+const app = express();
+const server = createServer(app);
+
+app.use(bodyParser.json());
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-const app = express();
-const server = createServer(app);
+const messaging = getMessaging();
+
+app.post('/send-notification', async (req, res) => {
+  const { fcmToken, title, body } = req.body;
+
+  console.log("EL FCM TOKEN AL QUE SE VA A MANDAR LA NOTIFICACIÓN: " + fcmToken);
+  
+
+  if (!fcmToken || !title || !body) {
+    return res.status(400).json({ error: 'Faltan parámetros.' });
+  }
+
+  try {
+    await sendPushNotification(fcmToken, title, body);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Error enviando la notificación.' });
+  }
+});
+
+
+const sendPushNotification = async (fcmToken, title, body) => {
+  
+  const message = {
+    token: fcmToken,
+    notification: {
+      title: title,
+      body: body,
+    },
+    android: {
+      "direct_boot_ok": true,
+    },
+  };
+
+  try {
+    const response = await getMessaging().send(message);
+    console.log("Notificación enviada:", response);
+  } catch (error) {
+    console.error("Error enviando notificación:", error);
+  }
+};  
+
+
 
 // // Load the certificates
 // const options = {
@@ -103,6 +152,28 @@ app.post('/verify-token', async (req, res) => {
   } catch (error) {
     console.error('Error al verificar el token:', error);
     res.status(401).json({ error: 'Token inválido o expirado' });
+  }
+});
+
+app.post('/send-notification', async (req, res) => {
+
+  console.log('SE VA A HACER UN PUSH NOTIFY');
+  
+
+  const { fcmToken, title, body } = req.body;
+
+
+  if (!fcmToken || !title || !body) {
+    return res.status(400).json({ error: 'Faltan parámetros.' });
+  }
+
+  try {
+    await sendPushNotification(fcmToken, title, body);
+    res.json({ success: true });
+    console.log('SE HA MANDADO EL PUSH');
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Error enviando la notificación.' });
   }
 });
 
