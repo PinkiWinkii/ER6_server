@@ -7,7 +7,7 @@ on: [push]
 jobs:
   pm2-configuration:
     #runner, This job will be running in runner with Ubuntu Server latest version.
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3 #checkout code from repository, so we code downloaded in runner.
       - uses: actions/setup-node@v3 #setup nodejs in our runner
