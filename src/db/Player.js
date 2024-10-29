@@ -61,10 +61,22 @@ const updateOnePlayerByEmail = async (playerEmail, changes) => {
     }
 }
 
+const verifyTowerAccesId = async ( towerId ) => {
+    try {
+        const player = await Player.find({ AccessTowerId: towerId });
+        return player;
+    }
+    catch ( error ){
+
+        throw error;
+    }
+}
+
 module.exports = {
     getAllPlayers,
     addNewPlayer,
     getPlayerByEmail,
     updateOnePlayer,
-    updateOnePlayerByEmail
+    updateOnePlayerByEmail,
+    verifyTowerAccesId
 }
