@@ -12,7 +12,7 @@ jobs:
     
      - name: Pull repo
        run: |
-         cd ~/Documentos/React/ER6/ER6_server
+         cd ~/home/daw1/Documentos/React/ER6/ER6_server
          git pull origin main
 
 
