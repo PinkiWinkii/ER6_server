@@ -93,9 +93,9 @@ client.on('connect', () => {
 client.on('message', async(topic, message) => {
   console.log(`Mensaje recibido en topic '${topic}': ${message.toString()}`);
 
-  const data = await playerController.verifyTowerAccesId(message.toString());
-
-  console.log(data);
+  const response = await playerController.verifyTowerAccesId(message.toString());
+  
+  manageHaveAccessTower(response);
 });
 
 // Manejar errores de conexión
@@ -198,3 +198,13 @@ async function start(){
 }
 
 start();
+
+const manageHaveAccessTower = (response) => {
+
+  if(response.haveAccessTower){
+
+  }else{
+    
+    client.publish('FailedValidation' , 'FAILED');
+  }
+}
