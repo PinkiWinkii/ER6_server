@@ -199,12 +199,16 @@ async function start(){
 
 start();
 
+const validationTopic = 'AnatiValidation'
+
 const manageHaveAccessTower = (response) => {
 
   if(response.haveAccessTower){
 
+    client.publish([validationTopic], 'GRANTED');
+
   }else{
     
-    client.publish('FailedValidation' , 'FAILED');
+    client.publish([validationTopic] , 'FAILED');
   }
 }
