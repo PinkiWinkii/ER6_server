@@ -52,6 +52,8 @@ client.on('error', (err) => {
 });
 
 console.log("Log de prueba para pm2");
+console.log("Prueba de pm2 automatizado");
+
 
 initSocket(server);
 const io = getSocket();
