@@ -205,10 +205,10 @@ const manageHaveAccessTower = (response) => {
 
   if(response.haveAccessTower){
 
-    client.publish([validationTopic], 'GRANTED');
+    client.publish(validationTopic, 'GRANTED');
 
   }else{
     
-    client.publish([validationTopic] , 'FAILED');
+    client.publish(validationTopic , 'FAILED');
   }
 }
