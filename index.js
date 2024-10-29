@@ -70,15 +70,34 @@ const sendPushNotification = async (fcmToken, title, body) => {
 
 
 
-const clientId = 'ANATIDAEPHOBIA_NODE';
+// Load the certificates
+const options = {
+  key: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.key'),
+  cert: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.crt'),
+  ca: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/ca.crt'),
+  rejectUnauthorized: true,
+  clientId: 'LANDER_NODE'
+}
 
-// Conectar al broker MQTT (asegúrate de que sea accesible desde Render)
-const mqttBrokerUrl = 'mqtt://10.80.128.11'; // Reemplaza con tu broker MQTT accesible
-const client = mqtt.connect(mqttBrokerUrl, { clientId });
+const client = mqtt.connect('mqtts://localhost:8883', options);
+
+const topic = 'test'
 
 client.on('connect', () => {
   console.log('Connected securely to MQTT broker');
+  
+  client.publish(topic, 'landers message from node', { qos: 0, retain: false }, (error) => {
+    if (error) {
+      console.error(error)
+    }
+  })
 })
+
+// Manejar errores de conexión
+client.on('error', (err) => {
+  console.error('Error de conexión:', err);
+  // Puedes agregar más acciones aquí, como reintentos o lógica adicional
+});
 
 initSocket(server);
 const io = getSocket();
