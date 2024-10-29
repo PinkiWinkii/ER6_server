@@ -1,0 +1,20 @@
+name: PM2 Server Continious Deployment
+run-name: Deploy to Ubuntu Server
+on:
+ push:
+   branches: [main]
+
+
+jobs:
+ deploy:
+   runs-on: self-hosted
+   steps:
+    
+     - name: Pull repo && Install Dependencies
+       run: |
+         cd /home/daw1/Documentos/React/ER6/ER6_server
+         git pull origin main
+         npm install
+
+     - name: Restart PM2
+       run: pm2 restart all
