@@ -51,7 +51,6 @@ client.on('error', (err) => {
   // Puedes agregar más acciones aquí, como reintentos o lógica adicional
 });
 
-console.log("Log de prueba para pm2");
 
 
 initSocket(server);
