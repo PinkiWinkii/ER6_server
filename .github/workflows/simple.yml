@@ -10,15 +10,11 @@ jobs:
    runs-on: self-hosted
    steps:
     
-     - name: Pull repo
+     - name: Pull repo && Install Dependencies
        run: |
          cd /home/daw1/Documentos/React/ER6/ER6_server
          git pull origin main
-
-
-     - name: Install dependencies
-       run: npm install --legacy-peer-deps
-
+         npm install
 
      - name: Restart PM2
        run: pm2 restart all
