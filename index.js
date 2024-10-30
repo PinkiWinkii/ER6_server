@@ -200,12 +200,13 @@ async function start(){
 start();
 
 const validationTopic = 'AnatiValidation'
+const openDoorTopic = 'OpenDoor'
 
 const manageHaveAccessTower = (response) => {
 
   if(response.haveAccessTower){
 
-    client.publish(validationTopic, 'GRANTED');
+    client.publish(openDoorTopic, 'Open the door');
 
   }else{
     
