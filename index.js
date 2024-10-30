@@ -81,21 +81,25 @@ const sendPushNotification = async (fcmToken, title, body) => {
 const client = mqtt.connect('mqtt://10.80.128.11:1883');
 
 const topic = 'testCardID'
+const doorIsOpenTopic = 'DoorIsOpen'
 
 client.on('connect', () => {
   console.log('Connected not securely to MQTT broker');
-  client.subscribe([topic], () => {
+  client.subscribe([topic, doorIsOpenTopic], () => {
     console.log(`Subscribe to topic '${topic}'`)
   })
 })
 
 // Manejar mensajes recibidos
-client.on('message', async(topic, message) => {
-  console.log(`Mensaje recibido en topic '${topic}': ${message.toString()}`);
+client.on('message', async (topic, message) => {
 
-  const response = await playerController.verifyTowerAccesId(message.toString());
-  
-  manageHaveAccessTower(response);
+  if (topic === 'testCardID') {
+    const response = await playerController.verifyTowerAccesId(message.toString());
+    manageHaveAccessTower(response);
+
+  } else if (topic === 'DoorIsOpen') {
+    console.log("Received DoorIsOpen message:", message.toString());
+  }
 });
 
 // Manejar errores de conexión
