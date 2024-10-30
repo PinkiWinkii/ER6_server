@@ -103,12 +103,7 @@ client.on('message', async (topic, message) => {
   } else if (topic === 'DoorIsOpen') {
     console.log("Received DoorIsOpen message:", message.toString());
 
-    if (io) {
-      io.emit('EnterToTower', 'OK!');
-      console.log("Emitido EnterToTower a todos los clientes");
-    } else {
-      console.log("Error: 'io' no está inicializado");
-    }
+    io.emit('EnterToTower', 'The door is open!');
   }
 });
 
