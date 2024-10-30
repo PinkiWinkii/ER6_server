@@ -21,6 +21,9 @@ const server = createServer(app);
 
 app.use(bodyParser.json());
 
+initSocket(server);
+const io = getSocket();
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -86,7 +89,7 @@ const doorIsOpenTopic = 'DoorIsOpen'
 client.on('connect', () => {
   console.log('Connected not securely to MQTT broker');
   client.subscribe([topic, doorIsOpenTopic], () => {
-    console.log(`Subscribe to topic '${topic}'`)
+    console.log(`Subscribe to topic '${topic} and ${doorIsOpenTopic}'`)
   })
 })
 
@@ -99,6 +102,13 @@ client.on('message', async (topic, message) => {
 
   } else if (topic === 'DoorIsOpen') {
     console.log("Received DoorIsOpen message:", message.toString());
+
+    if (io) {
+      io.emit('EnterToTower', 'OK!');
+      console.log("Emitido EnterToTower a todos los clientes");
+    } else {
+      console.log("Error: 'io' no está inicializado");
+    }
   }
 });
 
@@ -108,10 +118,6 @@ client.on('error', (err) => {
   // Puedes agregar más acciones aquí, como reintentos o lógica adicional
 });
 
-
-
-initSocket(server);
-const io = getSocket();
 //Listener para saber si alguien se ha conectado, y su conexiónId
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
