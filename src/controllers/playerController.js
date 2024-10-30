@@ -49,7 +49,8 @@ const addNewPlayer = async (req, res) => {
         isInsideLab:    false,                  // Inicializo en false siempre
         avatar:         body.avatar, 
         isInsideTower:  false,
-        AccesTowerID:   ''
+        AccesTowerID:   '',
+        fcmToken:       body.fcmToken,
     }
 
     try {
