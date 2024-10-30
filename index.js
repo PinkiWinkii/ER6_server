@@ -25,6 +25,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+//Test commentary
 const messaging = getMessaging();
 
 app.post('/send-notification', async (req, res) => {
@@ -92,9 +93,9 @@ client.on('connect', () => {
 client.on('message', async(topic, message) => {
   console.log(`Mensaje recibido en topic '${topic}': ${message.toString()}`);
 
-  const data = await playerController.verifyTowerAccesId(message.toString());
-
-  console.log(data);
+  const response = await playerController.verifyTowerAccesId(message.toString());
+  
+  manageHaveAccessTower(response);
 });
 
 // Manejar errores de conexión
@@ -197,3 +198,20 @@ async function start(){
 }
 
 start();
+
+const validationTopic = 'AnatiValidation'
+
+const manageHaveAccessTower = (response) => {
+  const topicFailed = 'AnatiValidationFailed';
+
+  if(response.haveAccessTower){
+
+    client.publish(validationTopic, 'GRANTED');
+
+  }else{
+    
+    client.publish(topicFailed, 'FAILED');
+
+    
+  }
+}
