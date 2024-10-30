@@ -21,6 +21,9 @@ const server = createServer(app);
 
 app.use(bodyParser.json());
 
+initSocket(server);
+const io = getSocket();
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -81,21 +84,32 @@ const sendPushNotification = async (fcmToken, title, body) => {
 const client = mqtt.connect('mqtt://10.80.128.11:1883');
 
 const topic = 'testCardID'
+const doorIsOpenTopic = 'DoorIsOpen'
 
 client.on('connect', () => {
   console.log('Connected not securely to MQTT broker');
-  client.subscribe([topic], () => {
-    console.log(`Subscribe to topic '${topic}'`)
+  client.subscribe([topic, doorIsOpenTopic], () => {
+    console.log(`Subscribe to topic '${topic} and ${doorIsOpenTopic}'`)
   })
 })
 
 // Manejar mensajes recibidos
-client.on('message', async(topic, message) => {
-  console.log(`Mensaje recibido en topic '${topic}': ${message.toString()}`);
+client.on('message', async (topic, message) => {
 
-  const response = await playerController.verifyTowerAccesId(message.toString());
-  
-  manageHaveAccessTower(response);
+  if (topic === 'testCardID') {
+    const response = await playerController.verifyTowerAccesId(message.toString());
+    manageHaveAccessTower(response);
+
+  } else if (topic === 'DoorIsOpen') {
+    console.log("Received DoorIsOpen message:", message.toString());
+
+    if (io) {
+      io.emit('EnterToTower', 'OK!');
+      console.log("Emitido EnterToTower a todos los clientes");
+    } else {
+      console.log("Error: 'io' no está inicializado");
+    }
+  }
 });
 
 // Manejar errores de conexión
@@ -104,10 +118,6 @@ client.on('error', (err) => {
   // Puedes agregar más acciones aquí, como reintentos o lógica adicional
 });
 
-
-
-initSocket(server);
-const io = getSocket();
 //Listener para saber si alguien se ha conectado, y su conexiónId
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
@@ -200,13 +210,14 @@ async function start(){
 start();
 
 const validationTopic = 'AnatiValidation'
+const openDoorTopic = 'OpenDoor'
 
 const manageHaveAccessTower = (response) => {
   const topicFailed = 'AnatiValidationFailed';
 
   if(response.haveAccessTower){
 
-    client.publish(validationTopic, 'GRANTED');
+    client.publish(openDoorTopic, 'Open the door');
 
   }else{
     
