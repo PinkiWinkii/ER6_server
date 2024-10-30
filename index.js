@@ -208,6 +208,7 @@ const validationTopic = 'AnatiValidation'
 const openDoorTopic = 'OpenDoor'
 
 const manageHaveAccessTower = (response) => {
+  const topicFailed = 'AnatiValidationFailed';
 
   if(response.haveAccessTower){
 
@@ -215,6 +216,8 @@ const manageHaveAccessTower = (response) => {
 
   }else{
     
-    client.publish(validationTopic , 'FAILED');
+    client.publish(topicFailed, 'FAILED');
+
+    
   }
 }
