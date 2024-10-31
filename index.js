@@ -143,7 +143,7 @@ io.on('connection', (socket) => {
 
     socket.on('CloseDoor', (msg) => {
       console.log(msg);
-      client.publish(closeDoorTopic, 'Close the door!');
+      client.publish(closeDoorTopic, msg);
     })
 
     // QR value receiving
