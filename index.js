@@ -9,7 +9,7 @@ const { createServer } = require("http");
 const playerController = require('./src/controllers/playerController');
 const mqtt = require('mqtt');
 const fs = require('fs');
-const PlayerService = require('./src/services/playerService');
+const playerService = require('./src/services/playerService')
 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
@@ -21,6 +21,9 @@ const app = express();
 const server = createServer(app);
 
 app.use(bodyParser.json());
+
+initSocket(server);
+const io = getSocket();
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -68,9 +71,7 @@ const sendPushNotification = async (fcmToken, title, body) => {
   } catch (error) {
     console.error("Error enviando notificación:", error);
   }
-};  
-
-
+};
 
 // // Load the certificates
 // const options = {
@@ -80,24 +81,52 @@ const sendPushNotification = async (fcmToken, title, body) => {
 //   rejectUnauthorized: true,
 //   clientId: 'LANDER_NODE'
 // }
-const client = mqtt.connect('mqtt://10.80.128.11:1883');
+
+const options = {
+  clientId: 'ANATIDAEPHOBIA_NODE'
+}
+
+const client = mqtt.connect('mqtt://10.80.128.11:1883', options);
 
 const topic = 'testCardID'
+const doorIsOpenTopic = 'DoorIsOpen'
 
 client.on('connect', () => {
   console.log('Connected not securely to MQTT broker');
   client.subscribe([topic], () => {
     console.log(`Subscribe to topic '${topic}'`)
   })
+
+  client.subscribe([doorIsOpenTopic], () => {
+    console.log(`Subscribe to topic '${doorIsOpenTopic}'`)
+    console.log();
+    
+  })
 })
 
 // Manejar mensajes recibidos
-client.on('message', async(topic, message) => {
-  console.log(`Mensaje recibido en topic '${topic}': ${message.toString()}`);
-
+client.on('message', async (topic, message) => {
   const response = await playerController.verifyTowerAccesId(message.toString());
+  const playerId = response.data._id.toString();
+  console.log(playerId);
   
-  manageHaveAccessTower(response);
+  if (topic === 'testCardID') {
+
+
+    manageHaveAccessTower(response);
+
+  } else if (topic === 'DoorIsOpen') {
+    console.log("Received DoorIsOpen message:", message.toString());
+
+    const changes =
+    {
+      isInsideTower: !response.data.isInsideTower
+    }
+    
+    const updatePlayer = await playerService.updateOnePlayerIsInsideTower(playerId, changes);
+    io.emit('updateTower' , {playerId, isInsideTower: updatePlayer.isInsideTower});
+    
+  }
 });
 
 // Manejar errores de conexión
@@ -106,10 +135,6 @@ client.on('error', (err) => {
   // Puedes agregar más acciones aquí, como reintentos o lógica adicional
 });
 
-
-
-initSocket(server);
-const io = getSocket();
 //Listener para saber si alguien se ha conectado, y su conexiónId
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
@@ -201,20 +226,20 @@ async function start(){
 
 start();
 
-const validationTopic = 'AnatiValidation'
+const openDoorTopic = 'OpenDoor'
 
 const manageHaveAccessTower = async(response) => {
   const topicFailed = 'AnatiValidationFailed';
 
   if(response.haveAccessTower){
 
-    client.publish(validationTopic, 'GRANTED');
+      client.publish(openDoorTopic, 'Open the door');
 
   }else{
     
     client.publish(topicFailed, 'FAILED');
 
-    const mortimer = await PlayerService.getPlayerByEmail("oskar.calvo@aeg.eus");
+    const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
     
     console.log(mortimer);
   }

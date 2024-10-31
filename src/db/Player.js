@@ -39,6 +39,7 @@ const getPlayerByEmail = async (playerEmail) => {
 const updateOnePlayer = async (playerId, changes) => {
 
     try {
+        
         let updatePlayer = await Player.findByIdAndUpdate(playerId, {$set: changes} , {new: true});
         return updatePlayer;
     }

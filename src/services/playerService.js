@@ -72,11 +72,25 @@ const verifyTowerAccesId = async( towerId ) => {
     }
 }
 
+const updateOnePlayerIsInsideTower = async( playerId, changes ) => {
+
+    try {
+        
+        const updatePlayer = Player.updateOnePlayer(playerId, changes);
+        return updatePlayer;
+    }
+    catch (error) {
+
+        throw error;
+    }
+}
+
 module.exports = {
     getAllPlayers,
     addNewPlayer,
     getPlayerByEmail,
     updateOnePlayer,
     updateOnePlayerByEmail,
-    verifyTowerAccesId
+    verifyTowerAccesId,
+    updateOnePlayerIsInsideTower
 }
