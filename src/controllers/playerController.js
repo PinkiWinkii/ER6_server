@@ -146,8 +146,6 @@ const updateOnePlayer = async (req, res) => {
         const io = getSocket();
         io.emit('update' , {playerId, isInsideLab: updatePlayer.isInsideLab});
 
-        io.emit('updateTower' , {playerId, isInsideTower: updatePlayer.isInsideTower});
-
         res.send({ status: "OK", data: updatePlayer});
     }
     catch (error){

@@ -106,7 +106,8 @@ client.on('connect', () => {
 // Manejar mensajes recibidos
 client.on('message', async (topic, message) => {
   const response = await playerController.verifyTowerAccesId(message.toString());
-  const playerID = response.data._id.toString();
+  const playerId = response.data._id.toString();
+  console.log(playerId);
   
   if (topic === 'testCardID') {
 
@@ -121,7 +122,8 @@ client.on('message', async (topic, message) => {
       isInsideTower: !response.data.isInsideTower
     }
     
-    const response2 = await playerService.updateOnePlayerIsInsideTower(playerID, changes);
+    const updatePlayer = await playerService.updateOnePlayerIsInsideTower(playerId, changes);
+    io.emit('updateTower' , {playerId, isInsideTower: updatePlayer.isInsideTower});
     
   }
 });
