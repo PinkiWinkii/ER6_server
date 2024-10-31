@@ -38,18 +38,9 @@ const getPlayerByEmail = async (playerEmail) => {
 
 const updateOnePlayer = async (playerId, changes) => {
 
-    console.log('playerId:', playerId);
-    console.log('changes:', changes);
-    
     try {
-        console.log("ENTRA AL UPDATEONEPLAYER");
         
         let updatePlayer = await Player.findByIdAndUpdate(playerId, {$set: changes} , {new: true});
-
-        console.log("updateplayer en UPDATEONEPLAYER");
-        console.log(updatePlayer);
-        
-        
         return updatePlayer;
     }
     catch (error){

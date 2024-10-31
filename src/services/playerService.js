@@ -74,12 +74,7 @@ const verifyTowerAccesId = async( towerId ) => {
 
 const updateOnePlayerIsInsideTower = async( playerId, changes ) => {
 
-
-
     try {
-        console.log("ENTRA AL UPDATEONEPLAYERISINSIDETOWER");
-        console.log('playerId:', playerId);
-        console.log('changes:', changes);
         
         const updatePlayer = Player.updateOnePlayer(playerId, changes);
         return updatePlayer;

@@ -16,8 +16,6 @@ const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc8
 const playerRouter = require('./src/routes/playerRoutes');
 const { initSocket, getSocket } = require('./src/socket');
 const { getMessaging } = require('firebase-admin/messaging');
-const { updateOnePlayer } = require('./src/db/Player');
-const { log } = require('console');
 
 const app = express();
 const server = createServer(app);
@@ -72,9 +70,7 @@ const sendPushNotification = async (fcmToken, title, body) => {
   } catch (error) {
     console.error("Error enviando notificación:", error);
   }
-};  
-
-
+};
 
 // // Load the certificates
 // const options = {
@@ -86,12 +82,9 @@ const sendPushNotification = async (fcmToken, title, body) => {
 // }
 
 const options = {
-
   clientId: 'ANATIDAEPHOBIA_NODE'
 }
 
-
-const clientID = 'Anatidaephobia-NODE'
 const client = mqtt.connect('mqtt://10.80.128.11:1883', options);
 
 const topic = 'testCardID'
