@@ -9,6 +9,7 @@ const { createServer } = require("http");
 const playerController = require('./src/controllers/playerController');
 const mqtt = require('mqtt');
 const fs = require('fs');
+const PlayerService = require('./src/services/playerService');
 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
@@ -42,6 +43,7 @@ app.post('/send-notification', async (req, res) => {
     await sendPushNotification(fcmToken, title, body);
     res.json({ success: true });
   } catch (error) {
+
     res.status(500).json({ error: 'Error enviando la notificación.' });
   }
 });
@@ -201,7 +203,7 @@ start();
 
 const validationTopic = 'AnatiValidation'
 
-const manageHaveAccessTower = (response) => {
+const manageHaveAccessTower = async(response) => {
   const topicFailed = 'AnatiValidationFailed';
 
   if(response.haveAccessTower){
@@ -212,6 +214,8 @@ const manageHaveAccessTower = (response) => {
     
     client.publish(topicFailed, 'FAILED');
 
+    const mortimer = await PlayerService.getPlayerByEmail("oskar.calvo@aeg.eus");
     
+    console.log(mortimer);
   }
 }
