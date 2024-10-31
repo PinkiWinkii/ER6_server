@@ -139,6 +139,13 @@ client.on('error', (err) => {
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
 
+    const closeDoorTopic = 'AnatiCloseDoor';
+
+    socket.on('CloseDoor', (msg) => {
+      console.log(msg);
+      client.publish(closeDoorTopic, 'Close the door!');
+    })
+
     // QR value receiving
     socket.on('qrScanned', (qrValue) => {
       // Primero parseamos el valor QR recibido
