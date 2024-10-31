@@ -107,11 +107,18 @@ client.on('connect', () => {
 // Manejar mensajes recibidos
 client.on('message', async (topic, message) => {
   const response = await playerController.verifyTowerAccesId(message.toString());
-  const playerId = response.data._id.toString();
-  console.log(playerId);
+
+  let playerId = "";
+
+  if (response.data){
+    playerId = response.data._id.toString();
+    console.log(playerId);
+    
+  } else {
+    console.log("Validation failed");
+  }
   
   if (topic === 'testCardID') {
-
 
     manageHaveAccessTower(response);
 
@@ -233,21 +240,30 @@ async function start(){
 
 start();
 
-const openDoorTopic = 'OpenDoor'
+
 
 const manageHaveAccessTower = async(response) => {
   const topicFailed = 'AnatiValidationFailed';
+  const openDoorTopic = 'OpenDoor'
+
+  const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
+  const fcmToken = mortimer.fcmToken;
+  let title = "Tower Entrance detected";
+  let body = "";
+    
+  //console.log(mortimer);
 
   if(response.haveAccessTower){
 
       client.publish(openDoorTopic, 'Open the door');
+      body = response.data.nickname + " has tried to enter the tower and succeeded!"
 
   }else{
     
     client.publish(topicFailed, 'FAILED');
+      body = "Someone has tried to enter the tower and failed!"
 
-    const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
-    
-    console.log(mortimer);
   }
+  await sendPushNotification(fcmToken, title, body);
+
 }
