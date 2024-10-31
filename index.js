@@ -9,12 +9,15 @@ const { createServer } = require("http");
 const playerController = require('./src/controllers/playerController');
 const mqtt = require('mqtt');
 const fs = require('fs');
+const playerService = require('./src/services/playerService')
 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter = require('./src/routes/playerRoutes');
 const { initSocket, getSocket } = require('./src/socket');
 const { getMessaging } = require('firebase-admin/messaging');
+const { updateOnePlayer } = require('./src/db/Player');
+const { log } = require('console');
 
 const app = express();
 const server = createServer(app);
@@ -81,29 +84,52 @@ const sendPushNotification = async (fcmToken, title, body) => {
 //   rejectUnauthorized: true,
 //   clientId: 'LANDER_NODE'
 // }
-const client = mqtt.connect('mqtt://10.80.128.11:1883');
+
+const options = {
+
+  clientId: 'ANATIDAEPHOBIA_NODE'
+}
+
+
+const clientID = 'Anatidaephobia-NODE'
+const client = mqtt.connect('mqtt://10.80.128.11:1883', options);
 
 const topic = 'testCardID'
 const doorIsOpenTopic = 'DoorIsOpen'
 
 client.on('connect', () => {
   console.log('Connected not securely to MQTT broker');
-  client.subscribe([topic, doorIsOpenTopic], () => {
-    console.log(`Subscribe to topic '${topic} and ${doorIsOpenTopic}'`)
+  client.subscribe([topic], () => {
+    console.log(`Subscribe to topic '${topic}'`)
+  })
+
+  client.subscribe([doorIsOpenTopic], () => {
+    console.log(`Subscribe to topic '${doorIsOpenTopic}'`)
+    console.log();
+    
   })
 })
 
 // Manejar mensajes recibidos
 client.on('message', async (topic, message) => {
-
+  const response = await playerController.verifyTowerAccesId(message.toString());
+  const playerID = response.data._id.toString();
+  
   if (topic === 'testCardID') {
-    const response = await playerController.verifyTowerAccesId(message.toString());
+
+
     manageHaveAccessTower(response);
 
   } else if (topic === 'DoorIsOpen') {
     console.log("Received DoorIsOpen message:", message.toString());
 
-    io.emit('EnterToTower', 'The door is open!');
+    const changes =
+    {
+      isInsideTower: !response.data.isInsideTower
+    }
+    
+    const response2 = await playerService.updateOnePlayerIsInsideTower(playerID, changes);
+    
   }
 });
 
@@ -204,7 +230,6 @@ async function start(){
 
 start();
 
-const validationTopic = 'AnatiValidation'
 const openDoorTopic = 'OpenDoor'
 
 const manageHaveAccessTower = (response) => {
@@ -212,12 +237,11 @@ const manageHaveAccessTower = (response) => {
 
   if(response.haveAccessTower){
 
-    client.publish(openDoorTopic, 'Open the door');
+      client.publish(openDoorTopic, 'Open the door');
 
   }else{
     
     client.publish(topicFailed, 'FAILED');
 
-    
   }
 }
