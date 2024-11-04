@@ -86,7 +86,7 @@ const options = {
   clientId: 'ANATIDAEPHOBIA_NODE'
 }
 
-const client = mqtt.connect('mqtt://10.80.128.11:1883', options);
+const client = mqtt.connect('mqtt://10.80.128.249:1883', options);
 
 const topic = 'testCardID'
 const doorIsOpenTopic = 'DoorIsOpen'
