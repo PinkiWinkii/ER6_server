@@ -167,8 +167,6 @@ io.on('connection', (socket) => {
         location: value.location
       }
 
-      console.log(changes);
-      
       const updatePlayer = await playerService.updateOnePlayerLocation(value.playerID, changes);
       
     })
