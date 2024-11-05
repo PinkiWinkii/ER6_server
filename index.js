@@ -86,7 +86,7 @@ const options = {
   clientId: 'ANATIDAEPHOBIA_NODE'
 }
 
-const client = mqtt.connect('mqtt://10.80.128.249:1883', options);
+const client = mqtt.connect('mqtt://10.80.128.2:1883', options);
 
 const topic = 'testCardID'
 const doorIsOpenTopic = 'DoorIsOpen'
@@ -107,8 +107,12 @@ client.on('connect', () => {
 // Manejar mensajes recibidos
 client.on('message', async (topic, message) => {
   const response = await playerController.verifyTowerAccesId(message.toString());
-
   let playerId = "";
+
+  const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
+  const fcmToken = mortimer.fcmToken;
+  let title = "Tower Entrance detected";
+  let body = "";
 
   if (response.data){
     playerId = response.data._id.toString();
@@ -132,7 +136,9 @@ client.on('message', async (topic, message) => {
     
     const updatePlayer = await playerService.updateOnePlayerIsInsideTower(playerId, changes);
     io.emit('updateTower' , {playerId, isInsideTower: updatePlayer.isInsideTower});
-    
+
+    body = response.data.nickname + " has tried to enter the tower and succeeded!"
+    await sendPushNotification(fcmToken, title, body);
   }
 });
 
@@ -240,8 +246,6 @@ async function start(){
 
 start();
 
-
-
 const manageHaveAccessTower = async(response) => {
   const topicFailed = 'AnatiValidationFailed';
   const openDoorTopic = 'OpenDoor'
@@ -250,20 +254,15 @@ const manageHaveAccessTower = async(response) => {
   const fcmToken = mortimer.fcmToken;
   let title = "Tower Entrance detected";
   let body = "";
-    
-  //console.log(mortimer);
 
   if(response.haveAccessTower){
 
       client.publish(openDoorTopic, 'Open the door');
-      body = response.data.nickname + " has tried to enter the tower and succeeded!"
 
   }else{
     
-    client.publish(topicFailed, 'FAILED');
+      client.publish(topicFailed, 'FAILED');
       body = "Someone has tried to enter the tower and failed!"
-
+      await sendPushNotification(fcmToken, title, body);
   }
-  await sendPushNotification(fcmToken, title, body);
-
 }
