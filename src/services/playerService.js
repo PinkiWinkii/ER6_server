@@ -85,6 +85,21 @@ const updateOnePlayerIsInsideTower = async( playerId, changes ) => {
     }
 }
 
+
+const updateOnePlayerLocation = async( playerId, changes ) => {
+
+    try {
+        
+        const updatePlayer = Player.updateOnePlayer(playerId, changes);
+        return updatePlayer;
+    }
+    catch (error) {
+
+        throw error;
+    }
+}
+
+
 module.exports = {
     getAllPlayers,
     addNewPlayer,
@@ -92,5 +107,6 @@ module.exports = {
     updateOnePlayer,
     updateOnePlayerByEmail,
     verifyTowerAccesId,
-    updateOnePlayerIsInsideTower
+    updateOnePlayerIsInsideTower,
+    updateOnePlayerLocation
 }

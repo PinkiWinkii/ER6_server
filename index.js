@@ -159,8 +159,18 @@ io.on('connection', (socket) => {
       client.publish(closeDoorTopic, msg);
     })
 
-    socket.on('UpdateLocation', (value) => {
-      console.log(value);
+    socket.on('UpdateLocation', async (value) => {
+      console.log(value.playerID);
+
+      const changes =
+      {
+        location: value.location
+      }
+
+      console.log(changes);
+      
+      const updatePlayer = await playerService.updateOnePlayerLocation(value.playerID, changes);
+      
     })
 
     // QR value receiving
