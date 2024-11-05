@@ -159,22 +159,26 @@ io.on('connection', (socket) => {
       client.publish(closeDoorTopic, msg);
     })
 
+    socket.on('UpdateLocation', (value) => {
+      console.log(value);
+    })
+
     // QR value receiving
     socket.on('qrScanned', (qrValue) => {
-      // Primero parseamos el valor QR recibido
-      const parsedQrValue = JSON.parse(qrValue);
-      console.log("QR Value received:", parsedQrValue);
-      
-      // Ahora sí podemos acceder a socketId de parsedQrValue
-      console.log("SOCKET ID OF THE SCANNED ACOLYTE: " + parsedQrValue.socketId);
-      
-      // Emitir el evento usando el socketId del objeto parseado
-      socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
-      
-      // Emitir OK message después de recibir el valor QR
-      socket.emit('ScanSuccess', "OK!");;
+    // Primero parseamos el valor QR recibido
+    const parsedQrValue = JSON.parse(qrValue);
+    console.log("QR Value received:", parsedQrValue);
+    
+    // Ahora sí podemos acceder a socketId de parsedQrValue
+    console.log("SOCKET ID OF THE SCANNED ACOLYTE: " + parsedQrValue.socketId);
+    
+    // Emitir el evento usando el socketId del objeto parseado
+    socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
+    
+    // Emitir OK message después de recibir el valor QR
+    socket.emit('ScanSuccess', "OK!");;
 
-      io.emit('value', socket.id);
+    io.emit('value', socket.id);
   });
 })
 
