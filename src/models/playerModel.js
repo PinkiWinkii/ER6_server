@@ -23,6 +23,7 @@ const playerSchema = new Schema({
     isInsideTower:  Boolean,
     AccessTowerId:  String,
     fcmToken: String,
+    location: String,
 })
 
 // Export model
