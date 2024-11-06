@@ -144,7 +144,10 @@ client.on('message', async (topic, message) => {
       await sendPushNotification(fcmToken, title, body);
     }
   } else {
-    console.log("NOT IN TOWER!");
+      const topicFailed = 'AnatiValidationFailed';
+      client.publish(topicFailed, 'FAILED');
+      body = "Someone has tried to enter the tower and it wasn't in tower!"
+      await sendPushNotification(fcmToken, title, body);
   }
 });
 
@@ -276,7 +279,6 @@ const manageHaveAccessTower = async(player) => {
       client.publish(openDoorTopic, 'Open the door');
 
   }else{
-    
       client.publish(topicFailed, 'FAILED');
       body = "Someone has tried to enter the tower and failed!"
       await sendPushNotification(fcmToken, title, body);
