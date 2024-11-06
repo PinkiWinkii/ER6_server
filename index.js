@@ -106,7 +106,7 @@ client.on('connect', () => {
 
 // Manejar mensajes recibidos
 client.on('message', async (topic, message) => {
-  const response = await playerController.verifyTowerAccesId(message.toString());
+  const player = await playerController.verifyTowerAccesId(message.toString());
   let playerId = "";
 
   const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
@@ -114,31 +114,37 @@ client.on('message', async (topic, message) => {
   let title = "Tower Entrance detected";
   let body = "";
 
-  if (response.data){
-    playerId = response.data._id.toString();
+  if (player.data){
+    playerId = player.data._id.toString();
     console.log(playerId);
     
   } else {
     console.log("Validation failed");
   }
+  console.log("PLAYER LOCATION: " + player.data.location);
+
+  // IF PLAYER IT'S NOT IN TOWER CANNOT ENTER
+  if (player.data.location === 'TOWER'){
+    if (topic === 'testCardID') {
+
+      manageHaveAccessTower(player);
   
-  if (topic === 'testCardID') {
-
-    manageHaveAccessTower(response);
-
-  } else if (topic === 'DoorIsOpen') {
-    console.log("Received DoorIsOpen message:", message.toString());
-
-    const changes =
-    {
-      isInsideTower: !response.data.isInsideTower
+    } else if (topic === 'DoorIsOpen') {
+      console.log("Received DoorIsOpen message:", message.toString());
+  
+      const changes =
+      {
+        isInsideTower: !player.data.isInsideTower
+      }
+      
+      const updatePlayer = await playerService.updateOnePlayerIsInsideTower(playerId, changes);
+      io.emit('updateTower' , {playerId, isInsideTower: updatePlayer.isInsideTower});
+  
+      body = player.data.nickname + " has tried to enter the tower and succeeded!"
+      await sendPushNotification(fcmToken, title, body);
     }
-    
-    const updatePlayer = await playerService.updateOnePlayerIsInsideTower(playerId, changes);
-    io.emit('updateTower' , {playerId, isInsideTower: updatePlayer.isInsideTower});
-
-    body = response.data.nickname + " has tried to enter the tower and succeeded!"
-    await sendPushNotification(fcmToken, title, body);
+  } else {
+    console.log("NOT IN TOWER!");
   }
 });
 
@@ -160,7 +166,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on('UpdateLocation', async (value) => {
-      console.log(value.playerID);
 
       const changes =
       {
@@ -168,7 +173,6 @@ io.on('connection', (socket) => {
       }
 
       const updatePlayer = await playerService.updateOnePlayerLocation(value.playerID, changes);
-      
     })
 
     // QR value receiving
@@ -258,7 +262,7 @@ async function start(){
 
 start();
 
-const manageHaveAccessTower = async(response) => {
+const manageHaveAccessTower = async(player) => {
   const topicFailed = 'AnatiValidationFailed';
   const openDoorTopic = 'OpenDoor'
 
@@ -267,7 +271,7 @@ const manageHaveAccessTower = async(response) => {
   let title = "Tower Entrance detected";
   let body = "";
 
-  if(response.haveAccessTower){
+  if(player.haveAccessTower){
 
       client.publish(openDoorTopic, 'Open the door');
 
