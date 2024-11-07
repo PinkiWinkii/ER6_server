@@ -87,22 +87,19 @@ const topics = {
   doorIsOpenTopic: 'DoorIsOpen',
   topicFailed: 'AnatiValidationFailed',
   closeDoorTopic: 'AnatiCloseDoor',
-  openDoorTopic: 'Open the door'
+  openDoorTopic: 'OpenDoor',
 }
 
 const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
 
-const topic = 'testCardID'
-const doorIsOpenTopic = 'DoorIsOpen'
-
 client.on('connect', () => {
   console.log('Connected securely to MQTT broker');
   client.subscribe([topics.topic], () => {
-    console.log(`Subscribe to topic '${topic}'`)
+    console.log(`Subscribe to topic '${topics.topic}'`)
   })
 
   client.subscribe([topics.doorIsOpenTopic], () => {
-    console.log(`Subscribe to topic '${doorIsOpenTopic}'`)
+    console.log(`Subscribe to topic '${topics.doorIsOpenTopic}'`)
     console.log();
     
   })
@@ -134,6 +131,8 @@ client.on('message', async (topic, message) => {
 
   // IF PLAYER IT'S NOT IN TOWER CANNOT ENTER
   if (player.data.location === 'TOWER'){
+    console.log(topic);
+    
     if (topic === 'testCardID') {
 
       manageHaveAccessTower(player);
