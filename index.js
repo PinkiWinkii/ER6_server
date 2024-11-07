@@ -116,11 +116,14 @@ client.on('message', async (topic, message) => {
   if (player.data){
     playerId = player.data._id.toString();
     console.log(playerId);
-    
+    console.log("PLAYER LOCATION: " + player.data.location);
   } else {
-    console.log("Validation failed");
+    const topicFailed = 'AnatiValidationFailed';
+    client.publish(topicFailed, 'FAILED');
+    body = "Someone has tried to enter to the tower while not being there!";
+    await sendPushNotification(fcmToken, title, body);
+    return;
   }
-  console.log("PLAYER LOCATION: " + player.data.location);
 
   // IF PLAYER IT'S NOT IN TOWER CANNOT ENTER
   if (player.data.location === 'TOWER'){
