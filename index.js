@@ -73,26 +73,22 @@ const sendPushNotification = async (fcmToken, title, body) => {
   }
 };
 
-// // Load the certificates
-// const options = {
-//   key: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.key'),
-//   cert: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/NODE/node.crt'),
-//   ca: fs.readFileSync('/home/labaka/Lander_DAW2/ER6/Certificates/ca.crt'),
-//   rejectUnauthorized: true,
-//   clientId: 'LANDER_NODE'
-// }
-
+// Load the certificates
 const options = {
+  key: fs.readFileSync('./Certificates/node.key'),
+  cert: fs.readFileSync('./Certificates/server.crt'),
+  ca: fs.readFileSync('./Certificates/ca.crt'),
+  rejectUnauthorized: true,
   clientId: 'ANATIDAEPHOBIA_NODE'
 }
 
-const client = mqtt.connect('mqtt://10.80.128.2:1883', options);
+const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
 
 const topic = 'testCardID'
 const doorIsOpenTopic = 'DoorIsOpen'
 
 client.on('connect', () => {
-  console.log('Connected not securely to MQTT broker');
+  console.log('Connected securely to MQTT broker');
   client.subscribe([topic], () => {
     console.log(`Subscribe to topic '${topic}'`)
   })
