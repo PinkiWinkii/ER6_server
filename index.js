@@ -110,6 +110,9 @@ client.on('message', async (topic, message) => {
   let title = "Tower Entrance detected";
   let body = "";
 
+  // console.log("PLAYER:");
+  // console.log(player.data);
+  
   if (player.data){
     playerId = player.data._id.toString();
     console.log(playerId);
@@ -135,14 +138,19 @@ client.on('message', async (topic, message) => {
       
       const updatePlayer = await playerService.updateOnePlayerIsInsideTower(playerId, changes);
       io.emit('updateTower' , {playerId, isInsideTower: updatePlayer.isInsideTower});
-  
-      body = player.data.nickname + " has tried to enter the tower and succeeded!"
-      await sendPushNotification(fcmToken, title, body);
+
+      if (!player.data.isInsideTower){
+        body = player.data.nickname + " has tried to enter to the tower and succeeded!"
+        await sendPushNotification(fcmToken, title, body);
+      } else {
+        body = player.data.nickname + " has tried to exit from tower and succeeded!"
+        await sendPushNotification(fcmToken, title, body);
+      }
     }
   } else {
       const topicFailed = 'AnatiValidationFailed';
       client.publish(topicFailed, 'FAILED');
-      body = "Someone has tried to enter the tower and it wasn't in tower!"
+      body = player.data.nickname + " has tried to enter to the tower while not being there!"
       await sendPushNotification(fcmToken, title, body);
   }
 });
