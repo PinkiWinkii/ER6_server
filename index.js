@@ -83,23 +83,24 @@ const options = {
 }
 
 const topics = {
-  topic: 'testCardID',
-  doorIsOpenTopic: 'DoorIsOpen',
-  topicFailed: 'AnatiValidationFailed',
-  closeDoorTopic: 'AnatiCloseDoor',
-  openDoorTopic: 'OpenDoor',
+  anatiCardID: 'testCardID',
+  anatiDoorIsOpen: 'DoorIsOpen',
+  anatiValidationFailed: 'AnatiValidationFailed',
+  anatiCloseDoor: 'AnatiCloseDoor',
+  anatiOpenDoor: 'OpenDoor',
 }
 
 const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
 
 client.on('connect', () => {
   console.log('Connected securely to MQTT broker');
-  client.subscribe([topics.topic], () => {
-    console.log(`Subscribe to topic '${topics.topic}'`)
+
+  client.subscribe([topics.anatiCardID], () => {
+    console.log(`Subscribe to topic '${topics.anatiCardID}'`)
   })
 
-  client.subscribe([topics.doorIsOpenTopic], () => {
-    console.log(`Subscribe to topic '${topics.doorIsOpenTopic}'`)
+  client.subscribe([topics.anatiDoorIsOpen], () => {
+    console.log(`Subscribe to topic '${topics.anatiDoorIsOpen}'`)
     console.log();
     
   })
@@ -123,7 +124,7 @@ client.on('message', async (topic, message) => {
     console.log(playerId);
     console.log("PLAYER LOCATION: " + player.data.location);
   } else { //UNKNOWN PLAYER NOT VALIDATED
-    client.publish(topics.topicFailed, 'FAILED');
+    client.publish(topics.anatiValidationFailed, 'FAILED');
     body = "Someone has tried to enter to the tower while not being there!";
     await sendPushNotification(fcmToken, title, body);
     return;
@@ -157,7 +158,7 @@ client.on('message', async (topic, message) => {
       }
     }
   } else {
-      client.publish(topics.topicFailed, 'FAILED');
+      client.publish(topics.anatiValidationFailed, 'FAILED');
       body = player.data.nickname + " has tried to enter to the tower while not being there!"
       await sendPushNotification(fcmToken, title, body);
   }
@@ -174,7 +175,7 @@ io.on('connection', (socket) => {
 
     socket.on('CloseDoor', (msg) => {
       console.log(msg);
-      client.publish(topics.closeDoorTopic, msg);
+      client.publish(topics.anatiCloseDoor, msg);
     })
 
     socket.on('UpdateLocation', async (value) => {
@@ -274,7 +275,7 @@ start();
 const manageHaveAccessTower = async(player) => {
 
   if(player.haveAccessTower){
-      client.publish(topics.openDoorTopic, 'Open the door');
+      client.publish(topics.anatiOpenDoor, 'Open the door');
   } else {
     console.log("No access value");
   }
