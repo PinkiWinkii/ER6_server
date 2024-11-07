@@ -82,6 +82,14 @@ const options = {
   clientId: 'ANATIDAEPHOBIA_NODE'
 }
 
+const topics = {
+  topic: 'testCardID',
+  doorIsOpenTopic: 'DoorIsOpen',
+  topicFailed: 'AnatiValidationFailed',
+  closeDoorTopic: 'AnatiCloseDoor',
+  openDoorTopic: 'Open the door'
+}
+
 const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
 
 const topic = 'testCardID'
@@ -89,11 +97,11 @@ const doorIsOpenTopic = 'DoorIsOpen'
 
 client.on('connect', () => {
   console.log('Connected securely to MQTT broker');
-  client.subscribe([topic], () => {
+  client.subscribe([topics.topic], () => {
     console.log(`Subscribe to topic '${topic}'`)
   })
 
-  client.subscribe([doorIsOpenTopic], () => {
+  client.subscribe([topics.doorIsOpenTopic], () => {
     console.log(`Subscribe to topic '${doorIsOpenTopic}'`)
     console.log();
     
@@ -118,8 +126,7 @@ client.on('message', async (topic, message) => {
     console.log(playerId);
     console.log("PLAYER LOCATION: " + player.data.location);
   } else { //UNKNOWN PLAYER NOT VALIDATED
-    const topicFailed = 'AnatiValidationFailed';
-    client.publish(topicFailed, 'FAILED');
+    client.publish(topics.topicFailed, 'FAILED');
     body = "Someone has tried to enter to the tower while not being there!";
     await sendPushNotification(fcmToken, title, body);
     return;
@@ -151,8 +158,7 @@ client.on('message', async (topic, message) => {
       }
     }
   } else {
-      const topicFailed = 'AnatiValidationFailed';
-      client.publish(topicFailed, 'FAILED');
+      client.publish(topics.topicFailed, 'FAILED');
       body = player.data.nickname + " has tried to enter to the tower while not being there!"
       await sendPushNotification(fcmToken, title, body);
   }
@@ -167,11 +173,9 @@ client.on('error', (err) => {
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
 
-    const closeDoorTopic = 'AnatiCloseDoor';
-
     socket.on('CloseDoor', (msg) => {
       console.log(msg);
-      client.publish(closeDoorTopic, msg);
+      client.publish(topics.closeDoorTopic, msg);
     })
 
     socket.on('UpdateLocation', async (value) => {
@@ -234,9 +238,7 @@ app.post('/send-notification', async (req, res) => {
 
   console.log('SE VA A HACER UN PUSH NOTIFY');
   
-
   const { fcmToken, title, body } = req.body;
-
 
   if (!fcmToken || !title || !body) {
     return res.status(400).json({ error: 'Faltan parámetros.' });
@@ -271,10 +273,9 @@ async function start(){
 start();
 
 const manageHaveAccessTower = async(player) => {
-  const openDoorTopic = 'OpenDoor'
 
   if(player.haveAccessTower){
-      client.publish(openDoorTopic, 'Open the door');
+      client.publish(topics.openDoorTopic, 'Open the door');
   } else {
     console.log("No access value");
   }
