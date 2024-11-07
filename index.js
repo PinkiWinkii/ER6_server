@@ -117,7 +117,7 @@ client.on('message', async (topic, message) => {
     playerId = player.data._id.toString();
     console.log(playerId);
     console.log("PLAYER LOCATION: " + player.data.location);
-  } else {
+  } else { //UNKNOWN PLAYER NOT VALIDATED
     const topicFailed = 'AnatiValidationFailed';
     client.publish(topicFailed, 'FAILED');
     body = "Someone has tried to enter to the tower while not being there!";
@@ -161,7 +161,6 @@ client.on('message', async (topic, message) => {
 // Manejar errores de conexión
 client.on('error', (err) => {
   console.error('Error de conexión:', err);
-  // Puedes agregar más acciones aquí, como reintentos o lógica adicional
 });
 
 //Listener para saber si alguien se ha conectado, y su conexiónId
@@ -213,7 +212,6 @@ app.use("/api/players", playerRouter);
 // Ruta para verificar el token
 app.post('/verify-token', async (req, res) => {
   const { idToken } = req.body;
-  //console.log("Token recibido:" + idToken);
   
   if (!idToken) {
     return res.status(400).json({ error: 'No se proporcionó el idToken' });
@@ -273,21 +271,11 @@ async function start(){
 start();
 
 const manageHaveAccessTower = async(player) => {
-  const topicFailed = 'AnatiValidationFailed';
   const openDoorTopic = 'OpenDoor'
 
-  const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
-  const fcmToken = mortimer.fcmToken;
-  let title = "Tower Entrance detected";
-  let body = "";
-
   if(player.haveAccessTower){
-
       client.publish(openDoorTopic, 'Open the door');
-
-  }else{
-      client.publish(topicFailed, 'FAILED');
-      body = "Someone has tried to enter the tower and failed!"
-      await sendPushNotification(fcmToken, title, body);
+  } else {
+    console.log("No access value");
   }
 }
