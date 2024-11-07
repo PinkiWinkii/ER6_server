@@ -83,11 +83,11 @@ const options = {
 }
 
 const topics = {
-  anatiCardID: 'testCardID',
-  anatiDoorIsOpen: 'DoorIsOpen',
+  anatiCardID: 'AnatiCardID',
+  anatiDoorIsOpen: 'AnatiDoorIsOpen',
   anatiValidationFailed: 'AnatiValidationFailed',
   anatiCloseDoor: 'AnatiCloseDoor',
-  anatiOpenDoor: 'OpenDoor',
+  anatiOpenDoor: 'AnatiOpenDoor',
 }
 
 const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
@@ -134,11 +134,11 @@ client.on('message', async (topic, message) => {
   if (player.data.location === 'TOWER'){
     console.log(topic);
     
-    if (topic === 'testCardID') {
+    if (topic === 'AnatiCardID') {
 
       manageHaveAccessTower(player);
   
-    } else if (topic === 'DoorIsOpen') {
+    } else if (topic === 'AnatiDoorIsOpen') {
       console.log("Received DoorIsOpen message:", message.toString());
   
       const changes =
@@ -173,7 +173,8 @@ client.on('error', (err) => {
 io.on('connection', (socket) => {
   console.log("User Socket ID:", socket.id);
 
-    socket.on('CloseDoor', (msg) => {
+    socket.on('AnatiCloseDoor', (msg) => {
+      
       console.log(msg);
       client.publish(topics.anatiCloseDoor, msg);
     })
