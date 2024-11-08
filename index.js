@@ -79,7 +79,6 @@ const options = {
   cert: fs.readFileSync('./Certificates/server.crt'),
   ca: fs.readFileSync('./Certificates/ca.crt'),
   rejectUnauthorized: true,
-  clientId: 'ANATIDAEPHOBIA_NODE'
 }
 
 const topics = {
