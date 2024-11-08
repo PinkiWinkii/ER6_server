@@ -86,7 +86,7 @@ const manageRole = (email) => {
             break;
 
         case VILLAIN_EMAIL:
-            role = 'VILLANO'
+            role = 'VILLAIN'
             break;
 
         case MORTIMER_EMAIL:
