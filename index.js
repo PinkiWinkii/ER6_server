@@ -14,6 +14,7 @@ const playerService = require('./src/services/playerService')
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter = require('./src/routes/playerRoutes');
+const artifactRouter = require('./src/routes/artifactRoutes');
 const { initSocket, getSocket } = require('./src/socket');
 const { getMessaging } = require('firebase-admin/messaging');
 
@@ -213,6 +214,7 @@ io.on('connection', (socket) => {
 app.use(cors()); 
 app.use(bodyParser.json());
 app.use("/api/players", playerRouter);
+app.use("api/artifacts", artifactRouter);
 
 // Ruta para verificar el token
 app.post('/verify-token', async (req, res) => {
