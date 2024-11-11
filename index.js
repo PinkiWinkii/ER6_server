@@ -83,7 +83,6 @@ const options = {
 }
 
 const optionsHiveMQ = {
-  clientId: 'ANATIDAEPHOBIA_NODE',
   username: 'lander',  // Si HiveMQ requiere autenticación
   password: 'patata',  // Si HiveMQ requiere autenticación
 }
