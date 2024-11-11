@@ -1,4 +1,6 @@
 .env
 node_modules/
 er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json
-Certificates
+ca.crt
+node.key
+server.crt
