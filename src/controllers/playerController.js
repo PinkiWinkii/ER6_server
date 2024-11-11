@@ -20,7 +20,7 @@ const getAllPlayers = async (req, res) => {
             .send({
                 status: "FAILED",
                 message: "Error al realizar la peticion",
-                "data": { error: error?.message || error}
+                data: { error: error?.message || error}
             })
     }
 }
