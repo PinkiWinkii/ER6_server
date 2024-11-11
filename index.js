@@ -75,9 +75,9 @@ const sendPushNotification = async (fcmToken, title, body) => {
 
 // Load the certificates
 const options = {
-  key: fs.readFileSync('./Certificates/node.key'),
-  cert: fs.readFileSync('./Certificates/server.crt'),
-  ca: fs.readFileSync('./Certificates/ca.crt'),
+  key: fs.readFileSync('node.key'),
+  cert: fs.readFileSync('server.crt'),
+  ca: fs.readFileSync('ca.crt'),
   rejectUnauthorized: true,
   clientId: 'ANATIDAEPHOBIA_NODE'
 }
