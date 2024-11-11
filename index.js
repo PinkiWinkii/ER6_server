@@ -214,7 +214,7 @@ io.on('connection', (socket) => {
 app.use(cors()); 
 app.use(bodyParser.json());
 app.use("/api/players", playerRouter);
-app.use("api/artifacts", artifactRouter);
+app.use("/api/artifacts", artifactRouter);
 
 // Ruta para verificar el token
 app.post('/verify-token', async (req, res) => {
