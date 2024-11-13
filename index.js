@@ -192,21 +192,31 @@ io.on('connection', (socket) => {
 
     // QR value receiving
     socket.on('qrScanned', (qrValue) => {
-    // Primero parseamos el valor QR recibido
-    const parsedQrValue = JSON.parse(qrValue);
-    console.log("QR Value received:", parsedQrValue);
-    
-    // Ahora sí podemos acceder a socketId de parsedQrValue
-    console.log("SOCKET ID OF THE SCANNED ACOLYTE: " + parsedQrValue.socketId);
-    
-    // Emitir el evento usando el socketId del objeto parseado
-    socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
-    
-    // Emitir OK message después de recibir el valor QR
-    socket.emit('ScanSuccess', "OK!");;
+      // Primero parseamos el valor QR recibido
+      const parsedQrValue = JSON.parse(qrValue);
+      
+      // Emitir el evento usando el socketId del objeto parseado
+      socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
+      
+      // Emitir OK message después de recibir el valor QR
+      socket.emit('ScanSuccess', "OK!");; 
 
-    io.emit('value', socket.id);
+      io.emit('value', socket.id);
   });
+
+    socket.on("HallDoorPressed", async (value) => {
+
+      const playerId = value.playerID;
+      const changes =
+      {
+        isInsideHall: !value.isInsideHall,
+      }
+      
+      const updatePlayer = await playerService.updateOnePlayerIsInsideHall(playerId, changes);
+      io.emit('updateHall' , {playerId, isInsideHall: updatePlayer.isInsideHall});
+      
+    })
+
 })
 
 
