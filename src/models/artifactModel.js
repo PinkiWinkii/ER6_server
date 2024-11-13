@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const artifactSchema = new Schema({
-    cordinate: {
+    coordinate: {
         latitude: Number,
-        altitude: Number
+        longitude: Number
     },
     isRetrieved: Boolean,
     image: String,
