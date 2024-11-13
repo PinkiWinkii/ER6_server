@@ -83,6 +83,11 @@ const options = {
   // clientId: 'ANATIDAEPHOBIA_NODE'
 }
 
+const optionsHiveMQ = {
+  username: 'lander',  // Si HiveMQ requiere autenticación
+  password: 'patata',  // Si HiveMQ requiere autenticación
+}
+
 const topics = {
   anatiCardID: 'AnatiCardID',
   anatiDoorIsOpen: 'AnatiDoorIsOpen',
@@ -91,10 +96,10 @@ const topics = {
   anatiOpenDoor: 'AnatiOpenDoor',
 }
 
-const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
+const client = mqtt.connect('mqtts://b7827170b66c440a94aa9c02519c52b3.s1.eu.hivemq.cloud', optionsHiveMQ);
 
 client.on('connect', () => {
-  console.log('Connected securely to MQTT broker');
+  console.log('Connected not securely to MQTT broker');
 
   client.subscribe([topics.anatiCardID], () => {
     console.log(`Subscribe to topic '${topics.anatiCardID}'`)
