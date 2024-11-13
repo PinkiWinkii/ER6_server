@@ -211,13 +211,21 @@ io.on('connection', (socket) => {
 
     socket.on("HallDoorPressed", async (value) => {
 
+      console.log("ARRIVED ISINSIDEHALL STATE: " +  value.isInsideHall);
+
       const playerId = value.playerID;
       const changes =
       {
         isInsideHall: !value.isInsideHall,
       }
+
+      console.log("CHANGING ISINSIDEHALL STATE TO: " +  changes.isInsideHall);
+      
       
       const updatePlayer = await playerService.updateOnePlayerIsInsideHall(playerId, changes);
+
+      console.log(updatePlayer.nickname + " has entered to the Hall of Sages");
+      
       io.emit('updateHall' , {playerId, isInsideHall: updatePlayer.isInsideHall});
       
     })
