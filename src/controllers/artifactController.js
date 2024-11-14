@@ -26,15 +26,15 @@ const getAllArtifacts = async (req, res) => {
 }
 
 const updateOneArtifact = async (req, res) => {
-    const { body, params : { artifactId } } = req;
+    const { body, params : { id } } = req;
 
     try {
-        const updateArtifact = await artifactService.updateOneArtifact(artifactId, body);
+        const updateArtifact = await artifactService.updateOneArtifact(id, body);
 
         if(!updateArtifact){
             return res.status(400).send({
                 status: "FAILED",
-                data: { error: `Can't find artifact with the id '${artifactId}' `}
+                data: { error: `Can't find artifact with the id '${id}' `}
             })
         }
 
