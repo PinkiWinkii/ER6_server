@@ -22,7 +22,18 @@ const addNewArtifact = async (newArtifact) => {
     }
 }
 
+const updateOneArtifact = async(artifactId, changes) => {
+    try  {
+        const updateArtifact = Artifact.updateOneArtifact(artifactId, changes);
+        return updateArtifact;
+    }
+    catch (error){
+        throw error;
+    }
+}
+
 module.exports = {
     getAllArtifacts,
-    addNewArtifact
+    addNewArtifact,
+    updateOneArtifact
 }
