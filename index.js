@@ -218,7 +218,25 @@ io.on('connection', (socket) => {
       }
       
       const updatePlayer = await playerService.updateOnePlayerIsInsideHall(playerId, changes);
-      io.emit('updateHall' , {playerId, isInsideHall: updatePlayer.isInsideHall});
+
+      const updatePlayerID = updatePlayer._id.toString();
+
+      console.log(playerId);
+      console.log(updatePlayerID);
+      
+
+      if (playerId === updatePlayerID){
+        console.log("COINCIDE PLAYERID");
+        
+        io.emit('updateMyHall' , {playerId, isInsideHall: updatePlayer.isInsideHall});
+      }
+      else if (playerId != updatePlayerID){
+        console.log("ES OTRO PLAYERID");
+        
+        io.emit('updateOtherHall' , {playerId, isInsideHall: updatePlayer.isInsideHall});
+      } else {
+        console.log("NO PUEDES HACER NADA");
+      }
       
     })
 
