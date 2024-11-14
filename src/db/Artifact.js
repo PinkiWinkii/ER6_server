@@ -22,8 +22,20 @@ const addNewArtifact = async (newArtifact) => {
     }
 }
 
+const updateOneArtifact = async(artifactId, changes) => {
+    try {
+        let updateArtifact = await Artifact.findByIdAndUpdate(artifactId, {$set: changes}, {new: true});
+        return updateArtifact;
+    }
+    catch(error){
+
+        throw error;
+    }
+}
+
 
 module.exports = {
     getAllArtifacts,
-    addNewArtifact
+    addNewArtifact,
+    updateOneArtifact
 }
