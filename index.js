@@ -221,22 +221,14 @@ io.on('connection', (socket) => {
 
       const updatePlayerID = updatePlayer._id.toString();
 
+      console.log("PLAYER ID OF VALUE");
       console.log(playerId);
+
+      console.log("PLAYER ID OF THE UPDATED USER");
       console.log(updatePlayerID);
       
-
-      if (playerId === updatePlayerID){
-        console.log("COINCIDE PLAYERID");
-        
-        io.emit('updateMyHall' , {playerId, isInsideHall: updatePlayer.isInsideHall});
-      }
-      else if (playerId != updatePlayerID){
-        console.log("ES OTRO PLAYERID");
-        
-        io.emit('updateOtherHall' , {playerId, isInsideHall: updatePlayer.isInsideHall});
-      } else {
-        console.log("NO PUEDES HACER NADA");
-      }
+      io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: !value.isInsideHall});
+     
       
     })
 
