@@ -25,6 +25,35 @@ const getAllArtifacts = async (req, res) => {
     }
 }
 
+const updateOneArtifact = async (req, res) => {
+    const { body, params : { artifactId } } = req;
+
+    try {
+        const updateArtifact = await artifactService.updateOneArtifact(artifactId, body);
+
+        if(!updateArtifact){
+            return res.status(400).send({
+                status: "FAILED",
+                data: { error: `Can't find artifact with the id '${artifactId}' `}
+            })
+        }
+
+        const io = getSocket();
+        io.emit('updateArtifact', { updateArtifact });
+
+        res.send({ status: "OK" , data: updateArtifact });
+    }
+    catch (error){
+
+        res.send(error?.status || 500).send({
+            status: "FAILED",
+            message: "Error al realizar la peticion",
+            data: { error: error?.message || error }
+        });
+    }
+}
+
 module.exports = {
-    getAllArtifacts
+    getAllArtifacts,
+    updateOneArtifact
 }
