@@ -76,10 +76,10 @@ const sendPushNotification = async (fcmToken, title, body) => {
 
 // Load the certificates
 const options = {
-  key: fs.readFileSync('node.key'),
-  cert: fs.readFileSync('server.crt'),
-  ca: fs.readFileSync('ca.crt'),
-  rejectUnauthorized: true,
+  // key: fs.readFileSync('node.key'),
+  // cert: fs.readFileSync('server.crt'),
+  // ca: fs.readFileSync('ca.crt'),
+  // rejectUnauthorized: true,
   clientId: 'ANATIDAEPHOBIA'
 }
 
@@ -91,7 +91,7 @@ const topics = {
   anatiOpenDoor: 'AnatiOpenDoor',
 }
 
-const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
+const client = mqtt.connect('mqtt://192.168.1.136:1883', options);
 
 client.on('connect', () => {
   console.log('Connected securely to MQTT broker');

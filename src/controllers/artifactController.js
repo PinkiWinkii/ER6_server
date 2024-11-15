@@ -39,7 +39,7 @@ const updateOneArtifact = async (req, res) => {
         }
 
         const io = getSocket();
-        io.emit('updateArtifact', { updateArtifact });
+        io.emit('updateArtifact', updateArtifact );
 
         res.send({ status: "OK" , data: updateArtifact });
     }
