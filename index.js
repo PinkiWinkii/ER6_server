@@ -220,17 +220,12 @@ io.on('connection', (socket) => {
       
       const updatePlayer = await playerService.updateOnePlayerIsInsideHall(playerId, changes);
 
-      const updatePlayerID = updatePlayer._id.toString();
-
-      console.log("PLAYER ID OF VALUE");
-      console.log(playerId);
-
-      console.log("PLAYER ID OF THE UPDATED USER");
-      console.log(updatePlayerID);
+      console.log("IS INSIDE HALL VALUES IN SERVER:");
       
-      io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: !value.isInsideHall});
-     
+      console.log(updatePlayer.isInsideHall);
+      console.log(!value.isInsideHall);
       
+      io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: updatePlayer.isInsideHall});
     })
     // Manage coordinates socket
     locationHandler(socket, io);
