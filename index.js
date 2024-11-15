@@ -17,6 +17,7 @@ const playerRouter = require('./src/routes/playerRoutes');
 const artifactRouter = require('./src/routes/artifactRoutes');
 const { initSocket, getSocket } = require('./src/socket');
 const { getMessaging } = require('firebase-admin/messaging');
+const { locationHandler } = require('./src/handlers/locationUpdate');
 
 const app = express();
 const server = createServer(app);
@@ -231,7 +232,8 @@ io.on('connection', (socket) => {
      
       
     })
-
+    // Manage coordinates socket
+    locationHandler(socket, io);
 })
 
 
