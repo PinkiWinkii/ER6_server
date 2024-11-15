@@ -85,6 +85,21 @@ const updateOnePlayerIsInsideTower = async( playerId, changes ) => {
     }
 }
 
+const updateOnePlayerIsInsideHall = async( playerId, changes ) => {
+    console.log(playerId);
+    
+    console.log(changes);
+    
+    try {
+        
+        const updatePlayer = Player.updateOnePlayer(playerId, changes);
+        return updatePlayer;
+    }
+    catch (error) {
+
+        throw error;
+    }
+}
 
 const updateOnePlayerLocation = async( playerId, changes ) => {
 
@@ -108,5 +123,6 @@ module.exports = {
     updateOnePlayerByEmail,
     verifyTowerAccesId,
     updateOnePlayerIsInsideTower,
-    updateOnePlayerLocation
+    updateOnePlayerLocation,
+    updateOnePlayerIsInsideHall
 }

@@ -83,6 +83,11 @@ const options = {
   clientId: 'ANATIDAEPHOBIA'
 }
 
+const optionsHiveMQ = {
+  username: 'lander',  // Si HiveMQ requiere autenticación
+  password: 'patata',  // Si HiveMQ requiere autenticación
+}
+
 const topics = {
   anatiCardID: 'AnatiCardID',
   anatiDoorIsOpen: 'AnatiDoorIsOpen',
@@ -91,10 +96,10 @@ const topics = {
   anatiOpenDoor: 'AnatiOpenDoor',
 }
 
-const client = mqtt.connect('mqtt://192.168.1.136:1883', options);
+const client = mqtt.connect('mqtts://b7827170b66c440a94aa9c02519c52b3.s1.eu.hivemq.cloud', optionsHiveMQ);
 
 client.on('connect', () => {
-  console.log('Connected securely to MQTT broker');
+  console.log('Connected not securely to MQTT broker');
 
   client.subscribe([topics.anatiCardID], () => {
     console.log(`Subscribe to topic '${topics.anatiCardID}'`)
@@ -192,21 +197,41 @@ io.on('connection', (socket) => {
 
     // QR value receiving
     socket.on('qrScanned', (qrValue) => {
-    // Primero parseamos el valor QR recibido
-    const parsedQrValue = JSON.parse(qrValue);
-    console.log("QR Value received:", parsedQrValue);
-    
-    // Ahora sí podemos acceder a socketId de parsedQrValue
-    console.log("SOCKET ID OF THE SCANNED ACOLYTE: " + parsedQrValue.socketId);
-    
-    // Emitir el evento usando el socketId del objeto parseado
-    socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
-    
-    // Emitir OK message después de recibir el valor QR
-    socket.emit('ScanSuccess', "OK!");;
+      // Primero parseamos el valor QR recibido
+      const parsedQrValue = JSON.parse(qrValue);
+      
+      // Emitir el evento usando el socketId del objeto parseado
+      socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
+      
+      // Emitir OK message después de recibir el valor QR
+      socket.emit('ScanSuccess', "OK!");; 
 
-    io.emit('value', socket.id);
+      io.emit('value', socket.id);
   });
+
+    socket.on("HallDoorPressed", async (value) => {
+
+      const playerId = value.playerID;
+      const changes =
+      {
+        isInsideHall: !value.isInsideHall,
+      }
+      
+      const updatePlayer = await playerService.updateOnePlayerIsInsideHall(playerId, changes);
+
+      const updatePlayerID = updatePlayer._id.toString();
+
+      console.log("PLAYER ID OF VALUE");
+      console.log(playerId);
+
+      console.log("PLAYER ID OF THE UPDATED USER");
+      console.log(updatePlayerID);
+      
+      io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: !value.isInsideHall});
+     
+      
+    })
+
 })
 
 
