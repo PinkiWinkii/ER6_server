@@ -9,7 +9,7 @@ const locationHandler = (socket, io) => {
 }
 
 const requestLocation = (socket) => {
-    socket.broadcast.emit('requesLocation', value);
+    socket.broadcast.emit('requesLocation');
 }
 
 module.exports = {
