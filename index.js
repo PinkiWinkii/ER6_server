@@ -14,8 +14,10 @@ const playerService = require('./src/services/playerService')
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter = require('./src/routes/playerRoutes');
+const artifactRouter = require('./src/routes/artifactRoutes');
 const { initSocket, getSocket } = require('./src/socket');
 const { getMessaging } = require('firebase-admin/messaging');
+const { locationHandler } = require('./src/handlers/locationUpdate');
 
 const app = express();
 const server = createServer(app);
@@ -75,10 +77,16 @@ const sendPushNotification = async (fcmToken, title, body) => {
 
 // Load the certificates
 const options = {
-  key: fs.readFileSync('./Certificates/node.key'),
-  cert: fs.readFileSync('./Certificates/server.crt'),
-  ca: fs.readFileSync('./Certificates/ca.crt'),
-  rejectUnauthorized: true,
+  // key: fs.readFileSync('node.key'),
+  // cert: fs.readFileSync('server.crt'),
+  // ca: fs.readFileSync('ca.crt'),
+  // rejectUnauthorized: true,
+  clientId: 'ANATIDAEPHOBIA'
+}
+
+const optionsHiveMQ = {
+  username: 'lander',  // Si HiveMQ requiere autenticación
+  password: 'patata',  // Si HiveMQ requiere autenticación
 }
 
 const topics = {
@@ -89,10 +97,10 @@ const topics = {
   anatiOpenDoor: 'AnatiOpenDoor',
 }
 
-const client = mqtt.connect('mqtts://10.80.128.2:8883', options);
+const client = mqtt.connect('mqtts://b7827170b66c440a94aa9c02519c52b3.s1.eu.hivemq.cloud', optionsHiveMQ);
 
 client.on('connect', () => {
-  console.log('Connected securely to MQTT broker');
+  console.log('Connected not securely to MQTT broker');
 
   client.subscribe([topics.anatiCardID], () => {
     console.log(`Subscribe to topic '${topics.anatiCardID}'`)
@@ -190,21 +198,37 @@ io.on('connection', (socket) => {
 
     // QR value receiving
     socket.on('qrScanned', (qrValue) => {
-    // Primero parseamos el valor QR recibido
-    const parsedQrValue = JSON.parse(qrValue);
-    console.log("QR Value received:", parsedQrValue);
-    
-    // Ahora sí podemos acceder a socketId de parsedQrValue
-    console.log("SOCKET ID OF THE SCANNED ACOLYTE: " + parsedQrValue.socketId);
-    
-    // Emitir el evento usando el socketId del objeto parseado
-    socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
-    
-    // Emitir OK message después de recibir el valor QR
-    socket.emit('ScanSuccess', "OK!");;
+      // Primero parseamos el valor QR recibido
+      const parsedQrValue = JSON.parse(qrValue);
+      
+      // Emitir el evento usando el socketId del objeto parseado
+      socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
+      
+      // Emitir OK message después de recibir el valor QR
+      socket.emit('ScanSuccess', "OK!");; 
 
-    io.emit('value', socket.id);
+      io.emit('value', socket.id);
   });
+
+    socket.on("HallDoorPressed", async (value) => {
+
+      const playerId = value.playerID;
+      const changes =
+      {
+        isInsideHall: !value.isInsideHall,
+      }
+      
+      const updatePlayer = await playerService.updateOnePlayerIsInsideHall(playerId, changes);
+
+      console.log("IS INSIDE HALL VALUES IN SERVER:");
+      
+      console.log(updatePlayer.isInsideHall);
+      console.log(!value.isInsideHall);
+      
+      io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: updatePlayer.isInsideHall});
+    })
+    // Manage coordinates socket
+    locationHandler(socket, io);
 })
 
 
@@ -212,6 +236,7 @@ io.on('connection', (socket) => {
 app.use(cors()); 
 app.use(bodyParser.json());
 app.use("/api/players", playerRouter);
+app.use("/api/artifacts", artifactRouter);
 
 // Ruta para verificar el token
 app.post('/verify-token', async (req, res) => {
