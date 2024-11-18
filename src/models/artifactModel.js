@@ -12,7 +12,7 @@ const artifactSchema = new Schema({
     markerImage: String,
     title: String,
     description: String,
-
+    avatar: String
 });
 
 module.exports = mongoose.model('Artifact', artifactSchema);
