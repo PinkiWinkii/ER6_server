@@ -16,6 +16,8 @@ const requestLocation = (socket) => {
 
 const deleteLocation = (socket) => {
     socket.on('deleteLocation', (playerId) => {
+        console.log("ID ANTES DE ELIMINAR " + playerId);
+
         socket.broadcast.emit('deleteLocation', playerId);
 
         console.log('ID del player a eliminar ' + playerId);
