@@ -14,7 +14,16 @@ const requestLocation = (socket) => {
     });
 }
 
+const deleteLocation = (socket) => {
+    socket.on('deleteLocation', (playerId) => {
+        socket.broadcast.emit('deleteLocation', playerId);
+
+        console.log('ID del player a eliminar ' + playerId);
+    }); 
+}
+
 module.exports = {
     locationHandler,
-    requestLocation
+    requestLocation,
+    deleteLocation
 }
