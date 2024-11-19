@@ -18,6 +18,7 @@ const artifactRouter = require('./src/routes/artifactRoutes');
 const { initSocket, getSocket } = require('./src/socket');
 const { getMessaging } = require('firebase-admin/messaging');
 const { locationHandler, requestLocation, deleteLocation } = require('./src/handlers/locationUpdate');
+const { mortimerCallingHandler } = require('./src/handlers/mortimerCallingHandler');
 
 const app = express();
 const server = createServer(app);
@@ -228,10 +229,8 @@ io.on('connection', (socket) => {
       io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: updatePlayer.isInsideHall});
     })
 
-    socket.on("CallMortimer", (msg) => {
-      console.log("MESSAGE RECEIVED FROM CALLING MORTIMER BUTTON");
-      console.log(msg);
-    })
+    // Manage mortimer calling
+    mortimerCallingHandler(socket);
 
     // Manage coordinates socket
     locationHandler(socket, io);
