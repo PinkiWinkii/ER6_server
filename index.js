@@ -227,6 +227,12 @@ io.on('connection', (socket) => {
       
       io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: updatePlayer.isInsideHall});
     })
+
+    socket.on("CallMortimer", (msg) => {
+      console.log("MESSAGE RECEIVED FROM CALLING MORTIMER BUTTON");
+      console.log(msg);
+    })
+
     // Manage coordinates socket
     locationHandler(socket, io);
     requestLocation(socket);
