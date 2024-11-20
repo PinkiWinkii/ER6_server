@@ -31,7 +31,7 @@ const mortimerCallingHandler = (socket) => {
         const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
         const fcmToken = mortimer.fcmToken;
         let title = "The acolytes call you, destiny awaits.";
-        let body = "The artifacts await, their power bound until validated.";
+        let body = "The artifacts await, their power is bounded until validated.";
         await sendPushNotification(fcmToken, title, body);
     })
 }
