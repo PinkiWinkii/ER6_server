@@ -10,6 +10,16 @@ const getAllArtifacts = async () => {
     }
 }
 
+const getStateArtifacts = async(id) => {
+    try {
+        const state = await Artifact.findById(id);
+        return state
+    }
+    catch (error){
+        throw error;
+    }
+}
+
 const addNewArtifact = async (newArtifact) => {
     try {
         let artifactToInsert = new Artifact(newArtifact);
@@ -37,5 +47,6 @@ const updateOneArtifact = async(artifactId, changes) => {
 module.exports = {
     getAllArtifacts,
     addNewArtifact,
-    updateOneArtifact
+    updateOneArtifact,
+    getStateArtifacts
 }

@@ -20,6 +20,7 @@ const { locationHandler, requestLocation, deleteLocation } = require('./src/hand
 const { artifactsValidatedHandler, requestValidationToMortimer } = require('./src/handlers/artifactsValidated');
 const { mortimerCallingHandler } = require('./src/handlers/mortimerCallingHandler');
 const { sendPushNotification } = require('./src/notifications/notificationSender');
+const { artifactsStateHandler } = require('./src/handlers/artifactsStateHandler'); 
 
 const app = express();
 const server = createServer(app);
@@ -212,8 +213,10 @@ io.on('connection', (socket) => {
     locationHandler(socket, io);
     requestLocation(socket);
     deleteLocation(socket);
+    // Manage artifacts isValidated state
     artifactsValidatedHandler(socket);
     requestValidationToMortimer(socket, io);
+    artifactsStateHandler(socket);
 })
 
 
