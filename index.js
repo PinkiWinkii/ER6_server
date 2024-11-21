@@ -17,7 +17,7 @@ const playerRouter = require('./src/routes/playerRoutes');
 const artifactRouter = require('./src/routes/artifactRoutes');
 const { initSocket, getSocket } = require('./src/socket');
 const { locationHandler, requestLocation, deleteLocation } = require('./src/handlers/locationUpdate');
-const artifactsValideatedHandler = require('./src/handlers/artifactsValidated');
+const { artifactsValidatedHandler, requestValidationToMortimer } = require('./src/handlers/artifactsValidated');
 const { mortimerCallingHandler } = require('./src/handlers/mortimerCallingHandler');
 const { sendPushNotification } = require('./src/notifications/notificationSender');
 
@@ -212,7 +212,8 @@ io.on('connection', (socket) => {
     locationHandler(socket, io);
     requestLocation(socket);
     deleteLocation(socket);
-    artifactsValideatedHandler(socket);
+    artifactsValidatedHandler(socket);
+    requestValidationToMortimer(socket, io);
 })
 
 
