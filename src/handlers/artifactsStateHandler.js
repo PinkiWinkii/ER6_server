@@ -1,7 +1,10 @@
 const artifactService = require('../services/artifactService');
 
-const artifactsStateHandler = async(socket) => {
-    const state = await artifactService.getStateArtifacts();
+const artifactsStateHandler = async(socket, id) => {
+    const artifact = await artifactService.getStateArtifacts(id);
+
+    console.log(JSON.stringify(artifact));
+    const state = artifact.isRetrieved;
 
     socket.on('requestArtifactsState' , () => { 
 

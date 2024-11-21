@@ -34,8 +34,8 @@ const updateOneArtifact = async(artifactId, changes) => {
 
 const getStateArtifacts = async (id) => {
     try {
-        const state = Artifact.getStateArtifacts(id);
-        return state;
+        const artifact = Artifact.getStateArtifacts(id);
+        return artifact;
     }
     catch (error){
         throw error;

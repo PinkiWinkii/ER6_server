@@ -12,8 +12,8 @@ const getAllArtifacts = async () => {
 
 const getStateArtifacts = async(id) => {
     try {
-        const state = await Artifact.findById(id);
-        return state
+        const artifact = await Artifact.findById(id);
+        return artifact
     }
     catch (error){
         throw error;
