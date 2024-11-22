@@ -15,12 +15,13 @@ const playerService = require('./src/services/playerService')
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
 const playerRouter = require('./src/routes/playerRoutes');
 const artifactRouter = require('./src/routes/artifactRoutes');
+const missionRouter = require('./src/routes/missionRoute');
 const { initSocket, getSocket } = require('./src/socket');
 const { locationHandler, requestLocation, deleteLocation } = require('./src/handlers/locationUpdate');
 const { artifactsValidatedHandler, requestValidationToMortimer } = require('./src/handlers/artifactsValidated');
 const { mortimerCallingHandler } = require('./src/handlers/mortimerCallingHandler');
 const { sendPushNotification } = require('./src/notifications/notificationSender');
-const artifactsStateHandler  = require('./src/handlers/artifactsStateHandler'); 
+
 
 const app = express();
 const server = createServer(app);
@@ -216,8 +217,6 @@ io.on('connection', (socket) => {
     // Manage artifacts isValidated state
     artifactsValidatedHandler(socket);
     requestValidationToMortimer(socket, io);
-    const id = "673fae18664ec38d2f5bf8a9"; // id para buscar el estado
-    artifactsStateHandler(socket, id);
 })
 
 
@@ -226,6 +225,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/api/players", playerRouter);
 app.use("/api/artifacts", artifactRouter);
+app.use("/api/missions", missionRouter);
 
 // Ruta para verificar el token
 app.post('/verify-token', async (req, res) => {
