@@ -10,6 +10,17 @@ const getAllMissions = async() => {
     }
 }
 
+const updateOneMission = async (missionId, changes) => {
+    try {
+        const mission = await Mission.updateOneMission(missionId, changes);
+        return mission;
+    }
+    catch (error){
+        throw error;
+    }
+}
+
 module.exports = {
     getAllMissions,
+    updateOneMission
 }
