@@ -21,6 +21,7 @@ const { locationHandler, requestLocation, deleteLocation } = require('./src/hand
 const { artifactsValidatedHandler, requestValidationToMortimer } = require('./src/handlers/artifactsValidated');
 const { mortimerCallingHandler } = require('./src/handlers/mortimerCallingHandler');
 const { sendPushNotification } = require('./src/notifications/notificationSender');
+const { hallDoorPressingHandler } = require('./src/handlers/hallDoorPressingHandler');
 
 
 const app = express();
@@ -189,23 +190,8 @@ io.on('connection', (socket) => {
       io.emit('value', socket.id);
   });
 
-    socket.on("HallDoorPressed", async (value) => {
-
-      const playerId = value.playerID;
-      const changes =
-      {
-        isInsideHall: !value.isInsideHall,
-      }
-
-      const updatePlayer = await playerService.updateOnePlayerIsInsideHall(playerId, changes);
-
-      console.log("IS INSIDE HALL VALUES IN SERVER:");
-
-      console.log(updatePlayer.isInsideHall);
-      console.log(!value.isInsideHall);
-
-      io.emit('updateMyHall' , {nickname: updatePlayer.nickname, playerId, isInsideHall: updatePlayer.isInsideHall});
-    })
+    // Manage hall door
+    hallDoorPressingHandler(socket, io);
 
     // Manage mortimer calling
     mortimerCallingHandler(socket);
