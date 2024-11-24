@@ -22,6 +22,7 @@ const { artifactsValidatedHandler, requestValidationToMortimer } = require('./sr
 const { mortimerCallingHandler } = require('./src/handlers/mortimerCallingHandler');
 const { sendPushNotification } = require('./src/notifications/notificationSender');
 const { hallDoorPressingHandler } = require('./src/handlers/hallDoorPressingHandler');
+const { labEntryHandler } = require('./src/handlers/labEntryHandler');
 
 
 const app = express();
@@ -176,19 +177,8 @@ io.on('connection', (socket) => {
       const updatePlayer = await playerService.updateOnePlayerLocation(value.playerID, changes);
     })
 
-    // QR value receiving
-    socket.on('qrScanned', (qrValue) => {
-      // Primero parseamos el valor QR recibido
-      const parsedQrValue = JSON.parse(qrValue);
-
-      // Emitir el evento usando el socketId del objeto parseado
-      socket.to(parsedQrValue.socketId).emit('ScanSuccess', "OK!");
-
-      // Emitir OK message después de recibir el valor QR
-      socket.emit('ScanSuccess', "OK!");;
-
-      io.emit('value', socket.id);
-  });
+    // Manage lab entry qr
+    labEntryHandler(socket, io);
 
     // Manage hall door
     hallDoorPressingHandler(socket, io);
@@ -200,6 +190,7 @@ io.on('connection', (socket) => {
     locationHandler(socket, io);
     requestLocation(socket);
     deleteLocation(socket);
+
     // Manage artifacts isValidated state
     artifactsValidatedHandler(socket);
     requestValidationToMortimer(socket, io);
