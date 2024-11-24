@@ -9,7 +9,6 @@ const { createServer } = require("http");
 const playerController = require('./src/controllers/playerController');
 const mqtt = require('mqtt');
 const fs = require('fs');
-const playerService = require('./src/services/playerService')
 
 // Inicializar Firebase Admin SDK
 const serviceAccount = require('./er6client-f6c7f-firebase-adminsdk-a28zc-a0fdc84a0a.json');
@@ -23,6 +22,7 @@ const { mortimerCallingHandler } = require('./src/handlers/mortimerCallingHandle
 const { sendPushNotification } = require('./src/notifications/notificationSender');
 const { hallDoorPressingHandler } = require('./src/handlers/hallDoorPressingHandler');
 const { labEntryHandler } = require('./src/handlers/labEntryHandler');
+const { playerLocationHandler } = require('./src/handlers/playerLocationHandler');
 
 
 const app = express();
@@ -167,15 +167,8 @@ io.on('connection', (socket) => {
       client.publish(topics.anatiCloseDoor, msg);
     })
 
-    socket.on('UpdateLocation', async (value) => {
-
-      const changes =
-      {
-        location: value.location
-      }
-
-      const updatePlayer = await playerService.updateOnePlayerLocation(value.playerID, changes);
-    })
+    // Manage player location in the app
+    playerLocationHandler(socket);
 
     // Manage lab entry qr
     labEntryHandler(socket, io);
