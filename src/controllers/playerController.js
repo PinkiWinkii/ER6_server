@@ -52,7 +52,8 @@ const addNewPlayer = async (req, res) => {
         AccesTowerID:   '',
         fcmToken:       body.fcmToken,
         location:       body.location,
-        isInsideHall:   false
+        isInsideHall:   false,
+        isBetrayer:     false
     }
 
     try {
