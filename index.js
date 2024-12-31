@@ -190,7 +190,7 @@ io.on('connection', (socket) => {
     requestValidationToMortimer(socket, io);
 
     // Manage player betrayer value
-    playerBetrayerHandler(socket);
+    playerBetrayerHandler(socket, io);
 })
 
 
