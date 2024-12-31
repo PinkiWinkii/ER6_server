@@ -23,6 +23,7 @@ const { sendPushNotification } = require('./src/notifications/notificationSender
 const { hallDoorPressingHandler } = require('./src/handlers/hallDoorPressingHandler');
 const { labEntryHandler } = require('./src/handlers/labEntryHandler');
 const { playerLocationHandler } = require('./src/handlers/playerLocationHandler');
+const { playerBetrayerHandler } = require('./src/handlers/playerBetrayHandler');
 
 
 const app = express();
@@ -187,6 +188,9 @@ io.on('connection', (socket) => {
     // Manage artifacts isValidated state
     artifactsValidatedHandler(socket);
     requestValidationToMortimer(socket, io);
+
+    // Manage player betrayer value
+    playerBetrayerHandler(socket);
 })
 
 

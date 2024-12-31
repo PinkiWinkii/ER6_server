@@ -7,7 +7,7 @@ const getAllPlayers = async () => {
         const allPlayers = Player.getAllPlayers();
         return allPlayers;
     }
-    catch (error){
+    catch (error) {
 
         throw error;
     }
@@ -16,10 +16,10 @@ const getAllPlayers = async () => {
 const addNewPlayer = async (newPlayer) => {
 
     try {
-        const  newPlayerAdded = Player.addNewPlayer(newPlayer);
+        const newPlayerAdded = Player.addNewPlayer(newPlayer);
         return newPlayerAdded;
-    } 
-    catch (error){
+    }
+    catch (error) {
 
         throw error;
     }
@@ -31,13 +31,13 @@ const getPlayerByEmail = async (playerEmail) => {
         const player = Player.getPlayerByEmail(playerEmail);
         return player;
     }
-    catch (error){
+    catch (error) {
 
         throw error;
     }
 }
 
-const updateOnePlayer = async(playerId, changes) => {
+const updateOnePlayer = async (playerId, changes) => {
 
     try {
         const updatePlayer = Player.updateOnePlayer(playerId, changes);
@@ -52,30 +52,30 @@ const updateOnePlayer = async(playerId, changes) => {
 const updateOnePlayerByEmail = async (playerEmail, changes) => {
 
     try {
-        const  updatePlayer = Player.updateOnePlayerByEmail(playerEmail, changes);
+        const updatePlayer = Player.updateOnePlayerByEmail(playerEmail, changes);
         return updatePlayer;
     }
-    catch (error){
+    catch (error) {
 
         throw error;
     }
 }
 
-const verifyTowerAccesId = async( towerId ) => {
+const verifyTowerAccesId = async (towerId) => {
     try {
         const player = await Player.verifyTowerAccesId(towerId);
         return player;
     }
-    catch (error){
+    catch (error) {
 
         throw error;
     }
 }
 
-const updateOnePlayerIsInsideTower = async( playerId, changes ) => {
+const updateOnePlayerIsInsideTower = async (playerId, changes) => {
 
     try {
-        
+
         const updatePlayer = Player.updateOnePlayer(playerId, changes);
         return updatePlayer;
     }
@@ -85,13 +85,13 @@ const updateOnePlayerIsInsideTower = async( playerId, changes ) => {
     }
 }
 
-const updateOnePlayerIsInsideHall = async( playerId, changes ) => {
+const updateOnePlayerIsInsideHall = async (playerId, changes) => {
     console.log(playerId);
-    
+
     console.log(changes);
-    
+
     try {
-        
+
         const updatePlayer = Player.updateOnePlayer(playerId, changes);
         return updatePlayer;
     }
@@ -101,10 +101,23 @@ const updateOnePlayerIsInsideHall = async( playerId, changes ) => {
     }
 }
 
-const updateOnePlayerLocation = async( playerId, changes ) => {
+const updateOnePlayerLocation = async (playerId, changes) => {
 
     try {
-        
+
+        const updatePlayer = Player.updateOnePlayer(playerId, changes);
+        return updatePlayer;
+    }
+    catch (error) {
+
+        throw error;
+    }
+}
+
+const updateOnePlayerIsBetrayer = async (playerId, changes) => {
+
+    try {
+
         const updatePlayer = Player.updateOnePlayer(playerId, changes);
         return updatePlayer;
     }
@@ -124,5 +137,6 @@ module.exports = {
     verifyTowerAccesId,
     updateOnePlayerIsInsideTower,
     updateOnePlayerLocation,
-    updateOnePlayerIsInsideHall
+    updateOnePlayerIsInsideHall,
+    updateOnePlayerIsBetrayer
 }
