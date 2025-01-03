@@ -26,6 +26,7 @@ const playerSchema = new Schema({
     location: String,
     isInsideHall: Boolean,
     isBetrayer: Boolean,
+    isCaptured: Boolean,
 })
 
 // Export model
