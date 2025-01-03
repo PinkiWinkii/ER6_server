@@ -53,7 +53,8 @@ const addNewPlayer = async (req, res) => {
         fcmToken:       body.fcmToken,
         location:       body.location,
         isInsideHall:   false,
-        isBetrayer:     false
+        isBetrayer:     false,
+        isCaptured:     false,
     }
 
     try {
@@ -79,6 +80,7 @@ const manageRole = (email) => {
     
     const ISTVAN_EMAIL    = "classcraft.daw2@aeg.eus";
     const MORTIMER_EMAIL  = "oskar.calvo@aeg.eus";
+    const ANGELO_EMAIL    = "angelo@kaotika.guru";
     const VILLAIN_EMAIL   = "ozarate@aeg.eus";
     const ACOLYTE_EMAIL   = "@ikasle.aeg.eus";
 
@@ -93,6 +95,10 @@ const manageRole = (email) => {
 
         case MORTIMER_EMAIL:
             role = 'MORTIMER'
+            break;
+        
+        case ANGELO_EMAIL:
+            role = 'ANGELO'
             break;
 
         default:
