@@ -127,6 +127,20 @@ const updateOnePlayerIsBetrayer = async (playerId, changes) => {
     }
 }
 
+const updateOnePlayerIsCaptured = async (playerId, changes) => {
+
+    try {
+
+        const updatePlayer = Player.updateOnePlayer(playerId, changes);
+        return updatePlayer;
+        
+    }
+    catch (error) {
+
+        throw error;
+    }
+}
+
 
 module.exports = {
     getAllPlayers,
@@ -138,5 +152,6 @@ module.exports = {
     updateOnePlayerIsInsideTower,
     updateOnePlayerLocation,
     updateOnePlayerIsInsideHall,
-    updateOnePlayerIsBetrayer
+    updateOnePlayerIsBetrayer,
+    updateOnePlayerIsCaptured
 }

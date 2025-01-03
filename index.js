@@ -24,6 +24,7 @@ const { hallDoorPressingHandler } = require('./src/handlers/hallDoorPressingHand
 const { labEntryHandler } = require('./src/handlers/labEntryHandler');
 const { playerLocationHandler } = require('./src/handlers/playerLocationHandler');
 const { playerBetrayerHandler } = require('./src/handlers/playerBetrayHandler');
+const { angeloCapturedHandler } = require('./src/handlers/angeloCapturedHandler');
 
 
 const app = express();
@@ -191,6 +192,9 @@ io.on('connection', (socket) => {
 
     // Manage player betrayer value
     playerBetrayerHandler(socket, io);
+
+    // Manage angelo's captured value
+    angeloCapturedHandler(socket, io);
 })
 
 
