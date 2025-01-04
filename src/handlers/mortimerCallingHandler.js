@@ -3,7 +3,7 @@ const playerService = require('../services/playerService');
 
 const mortimerCallingHandler = (socket) => {
 
-    socket.on("CallMortimerAngelo", async () => {
+    socket.on("CallMortimer", async (msg) => {
         console.log("MESSAGE RECEIVED FROM CALLING MORTIMER BUTTON");
         console.log(msg);
     
