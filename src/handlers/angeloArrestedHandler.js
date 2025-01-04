@@ -2,6 +2,17 @@ const playerService = require('../services/playerService.js');
 
 const angeloArrestedHandler = (socket, io) => {
 
+    socket.on('ArrestAngelo', () => {
+        console.log("SEND ARREST TO MORTIMER");
+
+        io.emit('ArrestingAngelo');
+    })
+
+    socket.on('NotArrestAngelo', () => {
+
+        io.emit('NotArrestingAngelo');
+    })
+
     socket.on('UpdateArrested', async (value) => {
 
         const changes =
@@ -13,7 +24,7 @@ const angeloArrestedHandler = (socket, io) => {
 
         console.log("ANGELO IS ARRESTED IN SERVER?");
         console.log(updatePlayer.isArrested);
-        
+
 
         io.emit('IsArrested', { isCaptured: updatePlayer.isCaptured, playerID: value.playerID });
     })
