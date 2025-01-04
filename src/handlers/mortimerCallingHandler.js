@@ -3,15 +3,15 @@ const playerService = require('../services/playerService');
 
 const mortimerCallingHandler = (socket) => {
 
-    socket.on("CallMortimer", async (msg) => {
+    socket.on("CallMortimerAngelo", async () => {
         console.log("MESSAGE RECEIVED FROM CALLING MORTIMER BUTTON");
         console.log(msg);
-
-        //Send notification
+    
+        // Send notification
         const mortimer = await playerService.getPlayerByEmail("oskar.calvo@aeg.eus");
         const fcmToken = mortimer.fcmToken;
-        let title = "The acolytes call you, destiny awaits.";
-        let body = "The artifacts await, their power is bounded until validated.";
+        let title = "Urgent: Your presence is needed immediately!";
+        let body = "An emergency of great magnitude is unfolding. You must come, destiny calls. Time is of the essence!";
         await sendPushNotification(fcmToken, title, body);
     })
 }
