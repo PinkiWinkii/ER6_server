@@ -55,6 +55,7 @@ const addNewPlayer = async (req, res) => {
         isInsideHall:   false,
         isBetrayer:     false,
         isCaptured:     false,
+        isArrested:     false,
     }
 
     try {
