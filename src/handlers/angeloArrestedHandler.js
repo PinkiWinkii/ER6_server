@@ -15,7 +15,7 @@ const angeloArrestedHandler = (socket, io) => {
         console.log(updatePlayer.isArrested);
         
 
-        io.emit('IsArrested', { isCaptured: updatePlayer.isCaptured, playerID: value.playerID });
+        io.emit('IsArrested', { isArrested: updatePlayer.isArrested, playerID: value.playerID });
     })
 }
 
