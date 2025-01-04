@@ -141,6 +141,20 @@ const updateOnePlayerIsCaptured = async (playerId, changes) => {
     }
 }
 
+const updateOnePlayerIsArrested = async (playerId, changes) => {
+
+    try {
+
+        const updatePlayer = Player.updateOnePlayer(playerId, changes);
+        return updatePlayer;
+        
+    }
+    catch (error) {
+
+        throw error;
+    }
+}
+
 
 module.exports = {
     getAllPlayers,
@@ -153,5 +167,6 @@ module.exports = {
     updateOnePlayerLocation,
     updateOnePlayerIsInsideHall,
     updateOnePlayerIsBetrayer,
-    updateOnePlayerIsCaptured
+    updateOnePlayerIsCaptured,
+    updateOnePlayerIsArrested
 }

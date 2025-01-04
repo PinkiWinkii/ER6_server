@@ -25,6 +25,7 @@ const { labEntryHandler } = require('./src/handlers/labEntryHandler');
 const { playerLocationHandler } = require('./src/handlers/playerLocationHandler');
 const { playerBetrayerHandler } = require('./src/handlers/playerBetrayHandler');
 const { angeloCapturedHandler } = require('./src/handlers/angeloCapturedHandler');
+const { angeloArrestedHandler } = require('./src/handlers/angeloArrestedHandler');
 
 
 const app = express();
@@ -195,6 +196,9 @@ io.on('connection', (socket) => {
 
     // Manage angelo's captured value
     angeloCapturedHandler(socket, io);
+
+    // Manage angelo's arrested value
+    angeloArrestedHandler(socket, io);
 })
 
 
