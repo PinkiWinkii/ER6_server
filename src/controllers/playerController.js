@@ -56,7 +56,10 @@ const addNewPlayer = async (req, res) => {
         isBetrayer:     false,
         isCaptured:     false,
         isArrested:     false,
-        modifiedAttributes : body.attributes
+        modifiedAttributes : body.attributes,
+        putridPlague: false,
+        epicWeakness: false,
+        medularApocalypse: false
     }
 
     try {

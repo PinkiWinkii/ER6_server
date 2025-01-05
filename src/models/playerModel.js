@@ -35,7 +35,11 @@ const playerSchema = new Schema({
         constitution: Number,
         strength: Number,
         insanity: Number,
-    }
+    },
+    putridPlague: Boolean,
+    epicWeakness: Boolean,
+    medularApocalypse: Boolean
+    
 })
 
 // Export model
