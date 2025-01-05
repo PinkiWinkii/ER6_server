@@ -9,17 +9,21 @@ const modifyAttributtesAcolytes = async() => {
 
         console.log('running a task every minute');
 
-        for(let i = 0; i < acolytes.length; i++){
+        for(let i = 0; i < acolytes.length; i++){            
             const acolyte = acolytes[i];
-            const attributes = acolyte.attributes;
-            const acolyteId = acolyte._id;
 
-            const newResistence = attributes.resistence - 0.10;
-            PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence' : newResistence });
-            modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
-            throwIlnessAleatory(acolyteId, attributes);
+            // Effects only to not betrayers
+            if(!acolyte.isBetrayer){
+                const attributes = acolyte.attributes;
+                const acolyteId = acolyte._id;
+    
+                const newResistence = attributes.resistence - 0.10;
+                PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence' : newResistence });
+                modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
+                throwIlnessAleatory(acolyteId, attributes);
+            }
+
         }
-
     });
 }
 
