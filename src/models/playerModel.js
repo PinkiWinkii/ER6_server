@@ -28,6 +28,14 @@ const playerSchema = new Schema({
     isBetrayer: Boolean,
     isCaptured: Boolean,
     isArrested: Boolean,
+    modifiedAttributes : {
+        intelligence: Number,
+        dexterity: Number,
+        charisma: Number,
+        constitution: Number,
+        strength: Number,
+        insanity: Number,
+    }
 })
 
 // Export model

@@ -56,6 +56,7 @@ const addNewPlayer = async (req, res) => {
         isBetrayer:     false,
         isCaptured:     false,
         isArrested:     false,
+        modifiedAttributes : body.attributes
     }
 
     try {

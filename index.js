@@ -27,6 +27,9 @@ const { playerBetrayerHandler } = require('./src/handlers/playerBetrayHandler');
 const { angeloCapturedHandler } = require('./src/handlers/angeloCapturedHandler');
 const { angeloArrestedHandler } = require('./src/handlers/angeloArrestedHandler');
 
+// CRON
+const modifyAttributtesAcolytes = require('./src/cron/modifyAttributesAcolytes');
+
 
 const app = express();
 const server = createServer(app);
@@ -267,6 +270,7 @@ async function start(){
 }
 
 start();
+modifyAttributtesAcolytes();
 
 const manageHaveAccessTower = async(player) => {
 
