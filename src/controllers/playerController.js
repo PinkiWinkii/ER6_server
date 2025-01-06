@@ -59,7 +59,8 @@ const addNewPlayer = async (req, res) => {
         modifiedAttributes : body.attributes,
         putridPlague: false,
         epicWeakness: false,
-        medularApocalypse: false
+        medularApocalypse: false,
+        ethazium: false
     }
 
     try {
