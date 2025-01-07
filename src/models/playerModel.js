@@ -3,7 +3,15 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const playerSchema = new Schema({
-    attributes: {},
+    attributes: {
+        intelligence: Number,
+        dexterity: Number,
+        charisma: Number,
+        constitution: Number,
+        strength: Number,
+        insanity: Number,
+        resistence: Number    
+    },
     equipment: {},
     inventory: {},
     name: String,

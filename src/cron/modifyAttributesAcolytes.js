@@ -11,19 +11,18 @@ const modifyAttributtesAcolytes = async() => {
 
         for(let i = 0; i < acolytes.length; i++){            
             const acolyte = acolytes[i];
+            const attributes = acolyte.attributes;
 
             // Effects only to not betrayers
             if(!acolyte.isBetrayer && attributes.resistence > 0){
-                const attributes = acolyte.attributes;
                 const acolyteId = acolyte._id;
-
+                
                 const newResistence = attributes.resistence - 10;
 
-                PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence' : newResistence });
+                await PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence' : newResistence });
                 modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
                 throwIlnessAleatory(acolyteId, attributes);
             }
-
         }
     });
 }
@@ -41,15 +40,15 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId)
             dexterity: newDexterity,
             intelligence: newIntelligence,
             charisma: attributes.charisma,
-
+            constitution: attributes.constitution,
         }
 
-        PlayerService.updateOnePlayer(playerId,  {modifiedAttributes: newModifiedAttributes });
+        await PlayerService.updateOnePlayer(playerId,  {modifiedAttributes: newModifiedAttributes });
     
     }else if(resistence > 30){
 
         const newInsanity = Math.floor(attributes.insanity + (50 - resistence));
-        PlayerService.updateOnePlayer(playerId, {'modifiedAttributes.insanity' : newInsanity});
+        await PlayerService.updateOnePlayer(playerId, {'modifiedAttributes.insanity' : newInsanity});
     
     }else {
         // Opcion para cuando la resistencia es menor a 30
@@ -57,7 +56,12 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId)
 
 }
 
-const throwIlnessAleatory = (playerId, attributes) => {
+const throwIlnessAleatory = (playerId, attributes, player) => {
+
+    if(player.putridPlague || player.epicWeakness || player.medularApocalypse || player.ethazium){
+        console.log(`The player with the id ${playerId} has already an ilness or curse`);
+        return;
+    }
 
     const ilness = Math.floor(Math.random() * 30) + 1;
 
