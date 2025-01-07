@@ -13,11 +13,12 @@ const modifyAttributtesAcolytes = async() => {
             const acolyte = acolytes[i];
 
             // Effects only to not betrayers
-            if(!acolyte.isBetrayer){
+            if(!acolyte.isBetrayer && attributes.resistence > 0){
                 const attributes = acolyte.attributes;
                 const acolyteId = acolyte._id;
-    
-                const newResistence = attributes.resistence - 0.10;
+
+                const newResistence = attributes.resistence - 10;
+
                 PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence' : newResistence });
                 modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
                 throwIlnessAleatory(acolyteId, attributes);
@@ -35,9 +36,12 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId)
         const newIntelligence = Math.floor(attributes.intelligence * (resistence / 100));
 
         const newModifiedAttributes = {
+            insanity: attributes.insanity,
             strength: newStrength,
             dexterity: newDexterity,
-            intelligence: newIntelligence
+            intelligence: newIntelligence,
+            charisma: attributes.charisma,
+
         }
 
         PlayerService.updateOnePlayer(playerId,  {modifiedAttributes: newModifiedAttributes });
@@ -55,7 +59,7 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId)
 
 const throwIlnessAleatory = (playerId, attributes) => {
 
-    const ilness = Math.floor(Math.random() * 30);
+    const ilness = Math.floor(Math.random() * 30) + 1;
 
 
     const ILNESS = {
