@@ -43,6 +43,7 @@ const playerSchema = new Schema({
         constitution: Number,
         strength: Number,
         insanity: Number,
+        resistence: Number
     },
     putridPlague: Boolean,
     epicWeakness: Boolean,

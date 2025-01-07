@@ -7,7 +7,7 @@ const modifyAttributtesAcolytes = async() => {
         const players =  await PlayerService.getAllPlayers();
         const acolytes = players.filter((player) => player.role === 'ACOLYTE');
 
-        console.log('running a task every minute');
+        console.log('running a task every 30 minute');
 
         for(let i = 0; i < acolytes.length; i++){            
             const acolyte = acolytes[i];
@@ -20,14 +20,14 @@ const modifyAttributtesAcolytes = async() => {
                 const newResistence = attributes.resistence - 10;
 
                 await PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence' : newResistence });
-                modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
+                modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId, newResistence);
                 throwIlnessAleatory(acolyteId, attributes);
             }
         }
     });
 }
 
-const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId) => {
+const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId, newResistence) => {
 
     if(resistence > 50){
         const newStrength = Math.floor(attributes.strength * (resistence / 100));
@@ -41,11 +41,12 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId)
             intelligence: newIntelligence,
             charisma: attributes.charisma,
             constitution: attributes.constitution,
+            resistence: newResistence
         }
 
         await PlayerService.updateOnePlayer(playerId,  {modifiedAttributes: newModifiedAttributes });
     
-    }else if(resistence > 30){
+    }else if(resistence >= 30){
 
         const newInsanity = Math.floor(attributes.insanity + (50 - resistence));
         await PlayerService.updateOnePlayer(playerId, {'modifiedAttributes.insanity' : newInsanity});
