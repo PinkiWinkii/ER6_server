@@ -29,6 +29,7 @@ const { angeloArrestedHandler } = require('./src/handlers/angeloArrestedHandler'
 
 // CRON
 const modifyAttributtesAcolytes = require('./src/cron/modifyAttributesAcolytes');
+const { appliedCursesHandler } = require('./src/handlers/appliedCursesHandler');
 
 
 const app = express();
@@ -181,6 +182,9 @@ io.on('connection', (socket) => {
 
     // Manage hall door
     hallDoorPressingHandler(socket, io);
+
+    //Manage applied curses
+    appliedCursesHandler(socket, io);
 
     // Manage mortimer calling
     mortimerCallingHandler(socket);
