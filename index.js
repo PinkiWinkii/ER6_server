@@ -29,6 +29,7 @@ const { angeloArrestedHandler } = require('./src/handlers/angeloArrestedHandler'
 
 // CRON
 const modifyAttributtesAcolytes = require('./src/cron/modifyAttributesAcolytes');
+const { playerResistanceHanler } = require('./src/handlers/playerResistanceHandler');
 
 
 const app = express();
@@ -202,6 +203,9 @@ io.on('connection', (socket) => {
 
     // Manage angelo's arrested value
     angeloArrestedHandler(socket, io);
+
+    // Manage player resistance
+    playerResistanceHanler(socket, io);
 })
 
 
