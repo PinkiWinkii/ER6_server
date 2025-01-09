@@ -48,7 +48,8 @@ const playerSchema = new Schema({
     putridPlague: Boolean,
     epicWeakness: Boolean,
     medularApocalypse: Boolean,
-    ethazium: Boolean
+    ethazium: Boolean,
+    curses: [],
 })
 
 // Export model
