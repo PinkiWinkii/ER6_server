@@ -1,34 +1,37 @@
 const cron = require('node-cron');
 const PlayerService = require('../services/playerService');
+const { getSocket } = require('../socket');
 
 const modifyAttributtesAcolytes = async() => {
-
-    cron.schedule('*/30 * * * *', async() => {
-        const players =  await PlayerService.getAllPlayers();
-        const acolytes = players.filter((player) => player.role === 'ACOLYTE');
-
-        console.log('running a task every 30 minute');
-
-        for(let i = 0; i < acolytes.length; i++){            
-            const acolyte = acolytes[i];
+    cron.schedule('* * * * *', async () => {
+        const players = await PlayerService.getAllPlayers();
+        const acolytes = players.filter(player => player.role === 'ACOLYTE');
+    
+        console.log('Running a task every minute');
+    
+        await Promise.all(acolytes.map(async (acolyte) => {
             const attributes = acolyte.attributes;
-
-            // Effects only to not betrayers
-            if(!acolyte.isBetrayer && attributes.resistence > 0){
+    
+            if (!acolyte.isBetrayer && attributes.resistence > 0) {
                 const acolyteId = acolyte._id;
-                
                 const newResistence = attributes.resistence - 10;
-
-                await PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence' : newResistence });
-                modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId, newResistence);
-                throwIlnessAleatory(acolyteId, attributes);
+    
+                try {
+                    await PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence': newResistence });
+                    await modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
+                    await throwIlnessAleatory(acolyteId, attributes, acolyte);
+                } catch (error) {
+                    console.error(`Error processing acolyte ${acolyteId}:`, error);
+                }
             }
-        }
+        }));
     });
 }
 
 const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId, newResistence) => {
 
+    const io = getSocket();
+    
     if(resistence > 50){
         const newStrength = Math.floor(attributes.strength * (resistence / 100));
         const newDexterity = Math.floor(attributes.dexterity * (resistence / 100));
@@ -44,12 +47,15 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId,
             resistence: newResistence
         }
 
-        await PlayerService.updateOnePlayer(playerId,  {modifiedAttributes: newModifiedAttributes });
-    
+        const updatePlayer = await PlayerService.updateOnePlayer(playerId,  {modifiedAttributes: newModifiedAttributes });
+        io.emit('updateAll', updatePlayer);
+        
     }else if(resistence >= 30){
 
         const newInsanity = Math.floor(attributes.insanity + (50 - resistence));
-        await PlayerService.updateOnePlayer(playerId, {'modifiedAttributes.insanity' : newInsanity});
+        const updatePlayer = await PlayerService.updateOnePlayer(playerId, {'modifiedAttributes.insanity' : newInsanity});
+        io.emit('updateAll', updatePlayer);
+
     
     }else {
         // Opcion para cuando la resistencia es menor a 30
@@ -57,7 +63,7 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId,
 
 }
 
-const throwIlnessAleatory = (playerId, attributes, player) => {
+const throwIlnessAleatory = async(playerId, attributes, player) => {
 
     if(player.putridPlague || player.epicWeakness || player.medularApocalypse || player.ethazium){
         console.log(`The player with the id ${playerId} has already an ilness or curse`);
@@ -76,19 +82,19 @@ const throwIlnessAleatory = (playerId, attributes, player) => {
     switch(ilness){
         case ILNESS.PUTRID_PLAGUE:
             const newIntelligence = Math.floor(attributes.intelligence - (attributes.intelligence * 0.75));
-            PlayerService.updateOnePlayer(playerId, { putridPlague: true,  'modifiedAttributes.intelligence' : newIntelligence });
+            await PlayerService.updateOnePlayer(playerId, { putridPlague: true,  'modifiedAttributes.intelligence' : newIntelligence });
             console.log(`player with the id ${playerId} has infected with Putrid plague`);
             break;
 
         case ILNESS.EPIC_WEAKNESS:
             const newStrength = Math.floor(attributes.strength - (attributes.strength * 0.6));
-            PlayerService.updateOnePlayer(playerId, { epicWeakness: true , 'modifiedAttributes.strength' : newStrength});
+            await PlayerService.updateOnePlayer(playerId, { epicWeakness: true , 'modifiedAttributes.strength' : newStrength});
             console.log(`player with the id ${playerId} has infected with Epic weakness`);
             break;
 
         case ILNESS.MEDULAR_APOCALYPSE:
             const newConstitution = Math.floor(attributes.constitution - (attributes.constitution * 0.3));
-            PlayerService.updateOnePlayer(playerId, { medularApocalypse: true , 'modifiedAttributes.constitution' : newConstitution});
+            await PlayerService.updateOnePlayer(playerId, { medularApocalypse: true , 'modifiedAttributes.constitution' : newConstitution});
             console.log(`player with the id ${playerId} has infected with Medular Apocalypse`);
             break;
     }
