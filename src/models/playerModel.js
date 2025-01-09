@@ -50,6 +50,7 @@ const playerSchema = new Schema({
     medularApocalypse: Boolean,
     ethazium: Boolean,
     curses: [],
+    ingredients: []
 })
 
 // Export model

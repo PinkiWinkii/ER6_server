@@ -42,7 +42,7 @@ const addNewPlayer = async (req, res) => {
         is_active:      body.is_active,
         profile:        body.profile,
         taks:           body.tasks,
-        gold:           body.gold,
+        gold:           body.gold,  
         created_date:   body.created_date,
         role:           role,                   // Asignar role desde server    
         socketId:       body.socketId,
@@ -60,7 +60,8 @@ const addNewPlayer = async (req, res) => {
         putridPlague: false,
         epicWeakness: false,
         medularApocalypse: false,
-        ethazium: false
+        ethazium: false,
+        ingredients: []
     }
 
     try {
