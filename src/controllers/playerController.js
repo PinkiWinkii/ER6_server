@@ -31,7 +31,15 @@ const addNewPlayer = async (req, res) => {
     const role        = manageRole(body.email);
 
     const newPlayer = {
-        attributes:     body.attributes,
+        attributes:     {
+            intelligence: body.attributes.intelligence,
+            dexterity: body.attributes.dexterity,
+            charisma: body.attributes.charisma,
+            constitution: body.attributes.constitution,
+            strength: body.attributes.strength,
+            insanity: body.attributes.insanity,
+            resistence: 100    
+        },
         equipment:      body.equipment,
         inventory:      body.inventory,
         name:           body.name,
