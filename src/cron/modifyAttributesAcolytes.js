@@ -64,6 +64,7 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId,
 }
 
 const throwIlnessAleatory = async(playerId, attributes, player) => {
+    const io = getSocket();
 
     if(player.putridPlague || player.epicWeakness || player.medularApocalypse || player.ethazium){
         console.log(`The player with the id ${playerId} has already an ilness or curse`);
@@ -79,22 +80,24 @@ const throwIlnessAleatory = async(playerId, attributes, player) => {
         MEDULAR_APOCALYPSE: 30
     }
 
+    let updatePlayer;
     switch(ilness){
         case ILNESS.PUTRID_PLAGUE:
             const newIntelligence = Math.floor(attributes.intelligence - (attributes.intelligence * 0.75));
-            await PlayerService.updateOnePlayer(playerId, { putridPlague: true,  'modifiedAttributes.intelligence' : newIntelligence });
+            updatePlayer = await PlayerService.updateOnePlayer(playerId, { putridPlague: true,  'modifiedAttributes.intelligence' : newIntelligence });
+            io.emit('updateAll', updatePlayer);
             console.log(`player with the id ${playerId} has infected with Putrid plague`);
             break;
 
         case ILNESS.EPIC_WEAKNESS:
             const newStrength = Math.floor(attributes.strength - (attributes.strength * 0.6));
-            await PlayerService.updateOnePlayer(playerId, { epicWeakness: true , 'modifiedAttributes.strength' : newStrength});
+            updatePlayer = await PlayerService.updateOnePlayer(playerId, { epicWeakness: true , 'modifiedAttributes.strength' : newStrength});
             console.log(`player with the id ${playerId} has infected with Epic weakness`);
             break;
 
         case ILNESS.MEDULAR_APOCALYPSE:
             const newConstitution = Math.floor(attributes.constitution - (attributes.constitution * 0.3));
-            await PlayerService.updateOnePlayer(playerId, { medularApocalypse: true , 'modifiedAttributes.constitution' : newConstitution});
+            updatePlayer = await PlayerService.updateOnePlayer(playerId, { medularApocalypse: true , 'modifiedAttributes.constitution' : newConstitution});
             console.log(`player with the id ${playerId} has infected with Medular Apocalypse`);
             break;
     }
