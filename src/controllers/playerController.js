@@ -169,6 +169,8 @@ const updateOnePlayer = async (req, res) => {
 
         const io = getSocket();
         io.emit('update' , {playerId, isInsideLab: updatePlayer.isInsideLab});
+        io.emit('updateAll', updatePlayer);
+
 
         res.send({ status: "OK", data: updatePlayer});
     }
