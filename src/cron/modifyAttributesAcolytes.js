@@ -3,7 +3,7 @@ const PlayerService = require('../services/playerService');
 const { getSocket } = require('../socket');
 
 const modifyAttributtesAcolytes = async() => {
-    cron.schedule('*/3 * * * *', async () => {
+    cron.schedule('* * * * *', async () => {
         const players = await PlayerService.getAllPlayers();
         const acolytes = players.filter(player => player.role === 'ACOLYTE');
     
@@ -71,7 +71,7 @@ const throwIlnessAleatory = async(playerId, attributes, player) => {
         return;
     }
 
-    const ilness = Math.floor(Math.random() * 30) + 1;
+    const ilness = 10;
 
 
     const ILNESS = {
