@@ -31,6 +31,7 @@ const { angeloArrestedHandler } = require('./src/handlers/angeloArrestedHandler'
 const modifyAttributtesAcolytes = require('./src/cron/modifyAttributesAcolytes');
 const { appliedCursesHandler } = require('./src/handlers/appliedCursesHandler');
 const { playerResistanceHanler } = require('./src/handlers/playerResistanceHandler');
+const { applyEthaziumHandler } = require('./src/handlers/applyEthaziumHandler');
 
 
 const app = express();
@@ -189,6 +190,9 @@ io.on('connection', (socket) => {
 
     // Manage mortimer calling
     mortimerCallingHandler(socket);
+
+    //Manage ethazium handler
+    applyEthaziumHandler(socket, io);
 
     // Manage coordinates socket
     locationHandler(socket, io);
