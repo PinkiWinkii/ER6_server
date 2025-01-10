@@ -3,11 +3,11 @@ const PlayerService = require('../services/playerService');
 const { getSocket } = require('../socket');
 
 const modifyAttributtesAcolytes = async() => {
-    cron.schedule('*/30 * * * *', async () => {
+    cron.schedule('*/3 * * * *', async () => {
         const players = await PlayerService.getAllPlayers();
         const acolytes = players.filter(player => player.role === 'ACOLYTE');
     
-        console.log('Running a task every 30 minutes');
+        console.log('Running a task every 3 minutes');
     
         await Promise.all(acolytes.map(async (acolyte) => {
             const attributes = acolyte.attributes;
