@@ -32,6 +32,7 @@ const modifyAttributtesAcolytes = require('./src/cron/modifyAttributesAcolytes')
 const { appliedCursesHandler } = require('./src/handlers/appliedCursesHandler');
 const { playerResistanceHanler } = require('./src/handlers/playerResistanceHandler');
 const { applyEthaziumHandler } = require('./src/handlers/applyEthaziumHandler');
+const { applyHealHandler } = require('./src/handlers/applyHealHandler');
 
 
 const app = express();
@@ -193,6 +194,9 @@ io.on('connection', (socket) => {
 
     //Manage ethazium handler
     applyEthaziumHandler(socket, io);
+
+    //Manage heal
+    applyHealHandler(socket, io);
 
     // Manage coordinates socket
     locationHandler(socket, io);
