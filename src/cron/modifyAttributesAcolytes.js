@@ -70,7 +70,7 @@ const throwIlnessAleatory = async(playerId, attributes, player) => {
         return;
     }
 
-    const ilness = 10;
+    const ilness = Math.floor(Math.random() * 30) + 1;
 
 
     const ILNESS = {
