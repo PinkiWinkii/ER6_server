@@ -3,7 +3,7 @@ const PlayerService = require('../services/playerService');
 const { getSocket } = require('../socket');
 
 const modifyAttributtesAcolytes = async() => {
-    cron.schedule('*/30 * * * *', async () => {
+    cron.schedule('*/3 * * * *', async () => {
         const players = await PlayerService.getAllPlayers();
         const acolytes = players.filter(player => player.role === 'ACOLYTE');
     
@@ -19,7 +19,7 @@ const modifyAttributtesAcolytes = async() => {
                 try {
                     await PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence': newResistence });
                     await modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
-                    await throwIlnessAleatory(acolyteId, attributes, acolyte);
+                    await throwIlnessAleatory(acolyteId, acolyte.modifiedAttributes, acolyte);
                 } catch (error) {
                     console.error(`Error processing acolyte ${acolyteId}:`, error);
                 }
@@ -55,7 +55,6 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId,
         const newInsanity = Math.floor(attributes.insanity + (50 - resistence));
         const updatePlayer = await PlayerService.updateOnePlayer(playerId, {'modifiedAttributes.insanity' : newInsanity});
         io.emit('updateAll', updatePlayer);
-
     
     }else {
         // Opcion para cuando la resistencia es menor a 30
