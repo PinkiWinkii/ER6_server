@@ -12,8 +12,12 @@ const playerBetrayerHandler = (socket, io) => {
         console.log('RESPONSE IN PATCH PLAYER IN KAOTIKA:');
         console.log(updateResponse);
     
-        const data = await updateResponse.json();
+        const data = await updateResponse.data.json();
+
+        console.log('RESPONSE IN PATCH PLAYER IN KAOTIKA:');
         //Añades al json del patch tanto el oro como el inventario
+        console.log(data);
+        
 
         const updatePlayer = await playerService.updateOnePlayerIsBetrayer(value._id, data);
         io.emit('IsBetrayer', updatePlayer);
