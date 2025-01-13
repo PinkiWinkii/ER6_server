@@ -3,7 +3,7 @@ const PlayerService = require('../services/playerService');
 const { getSocket } = require('../socket');
 
 const modifyAttributtesAcolytes = async() => {
-    cron.schedule('*/3 * * * *', async () => {
+    cron.schedule('*/4 * * * *', async () => {
         const players = await PlayerService.getAllPlayers();
         const acolytes = players.filter(player => player.role === 'ACOLYTE');
     
