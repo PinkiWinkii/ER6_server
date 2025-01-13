@@ -5,7 +5,7 @@ const playerBetrayerHandler = (socket, io) => {
     socket.on('UpdateBetrayer', async (value) => {
 
         //Hacer fetch a kaotika
-        const updateResponse = await fetch(`https://kaotika-server.fly.dev/loyalty/email/${value.email}`, {
+        const updateResponse = await fetch(`https://kaotika-server.fly.dev/players/loyalty/email/${value.email}`, {
             method: 'PATCH'
         });
 
