@@ -11,8 +11,6 @@ const playerBetrayerHandler = (socket, io) => {
         const changes =
         {
             isBetrayer: !value.isBetrayer,
-            gold: 500,
-            inventory: [],
         }
 
         const updatePlayer = await playerService.updateOnePlayerIsBetrayer(value._id, changes);
