@@ -4,13 +4,19 @@ const playerBetrayerHandler = (socket, io) => {
 
     socket.on('UpdateBetrayer', async (value) => {
 
+        //Hacer fetch a kaotika
+
+        //Añades al json del patch tanto el oro como el inventario
+        
         const changes =
         {
-            isBetrayer: !value.isBetrayer
+            isBetrayer: !value.isBetrayer,
+            gold: 500,
+            inventory: [],
         }
 
         const updatePlayer = await playerService.updateOnePlayerIsBetrayer(value.playerID, changes);
-        io.emit('IsBetrayer', { isBetrayer: updatePlayer.isBetrayer, playerID: value.playerID });
+        io.emit('IsBetrayer', updatePlayer);
     })
 }
 
