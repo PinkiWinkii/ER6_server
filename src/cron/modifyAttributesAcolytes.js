@@ -17,9 +17,9 @@ const modifyAttributtesAcolytes = async() => {
                 const newResistence = attributes.resistence - 10;
     
                 try {
-                    await PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence': newResistence });
+                    const playerUpdatted = await PlayerService.updateOnePlayer(acolyteId, { 'attributes.resistence': newResistence });
                     await modifyAttibuteAcordingResistence(newResistence, attributes, acolyteId);
-                    await throwIlnessAleatory(acolyteId, acolyte.modifiedAttributes, acolyte);
+                    await throwIlnessAleatory(acolyteId, acolyte.modifiedAttributes, acolyte, playerUpdatted);
                 } catch (error) {
                     console.error(`Error processing acolyte ${acolyteId}:`, error);
                 }
@@ -28,7 +28,7 @@ const modifyAttributtesAcolytes = async() => {
     });
 }
 
-const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId, newResistence) => {
+const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId, newResistence, playerUpdatted) => {
 
     const io = getSocket();
     
@@ -57,6 +57,7 @@ const modifyAttibuteAcordingResistence = async(resistence, attributes, playerId,
         io.emit('updateAll', updatePlayer);
     
     }else {
+        io.emit('updateAll', playerUpdatted);
         // Opcion para cuando la resistencia es menor a 30
     }
 
